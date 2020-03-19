@@ -38,6 +38,9 @@ class VirtualKeyboard extends StatefulWidget {
   /// Set to true if you want only to show Caps letters.
   final bool alwaysCaps;
 
+  /// inverse the layout to fix the issues with right to left languages.
+  final bool reverseLayout;
+
   /// used for multi-languages with default layouts, the default is English only
   /// will be ignored if customLayoutKeys is not null
   final List<VirtualKeyboardDefaultLayouts> defaultLayouts;
@@ -51,6 +54,7 @@ class VirtualKeyboard extends StatefulWidget {
       this.defaultLayouts,
       this.customLayoutKeys,
       this.textController,
+      this.reverseLayout = false,
       this.height = _virtualKeyboardDefaultHeight,
       this.textColor = Colors.black,
       this.fontSize = 14,
@@ -75,6 +79,7 @@ class _VirtualKeyboardState extends State<VirtualKeyboard> {
   Color textColor;
   double fontSize;
   bool alwaysCaps;
+  bool reverseLayout;
   VirtualKeyboardLayoutKeys customLayoutKeys;
   // Text Style for keys.
   TextStyle textStyle;
@@ -126,6 +131,7 @@ class _VirtualKeyboardState extends State<VirtualKeyboard> {
       textColor = widget.textColor;
       fontSize = widget.fontSize;
       alwaysCaps = widget.alwaysCaps;
+      reverseLayout = widget.reverseLayout ?? false;
       textController = widget.textController ?? textController;
       customLayoutKeys = widget.customLayoutKeys ?? customLayoutKeys ;
       // Init the Text Style for keys.
@@ -149,7 +155,7 @@ class _VirtualKeyboardState extends State<VirtualKeyboard> {
     textColor = widget.textColor;
     fontSize = widget.fontSize;
     alwaysCaps = widget.alwaysCaps;
-
+    reverseLayout = widget.reverseLayout ?? false;
     // Init the Text Style for keys.
     textStyle = TextStyle(
       fontSize: fontSize,
@@ -196,13 +202,7 @@ class _VirtualKeyboardState extends State<VirtualKeyboard> {
 
     // Generate keyboard row.
     List<Widget> rows = List.generate(keyboardRows.length, (int rowNum) {
-      return Material(
-        color: Colors.transparent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          // Generate keboard keys
-          children: List.generate(
+      var items =List.generate(
             keyboardRows[rowNum].length,
             (int keyNum) {
               // Get the VirtualKeyboardKey object.
@@ -236,8 +236,17 @@ class _VirtualKeyboardState extends State<VirtualKeyboard> {
               }
 
               return keyWidget;
-            },
-          ),
+            });
+
+      if(this.reverseLayout)
+        items = items.reversed.toList();      
+      return Material(
+        color: Colors.transparent,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          // Generate keboard keys
+          children: items,
         ),
       );
     });

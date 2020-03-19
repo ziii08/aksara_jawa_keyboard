@@ -68,6 +68,10 @@ VirtualKeyboardLayoutKeys customLayoutKeys;
 /// will be ignored if customLayoutKeys is not null
 List<VirtualKeyboardDefaultLayouts> defaultLayouts;
 ```
+```dart
+/// inverse the layout to fix the issues with right to left languages, default is false.
+bool reverseLayout;
+```
 
 ### VirtualKeyboardType
 enum of Available Virtual Keyboard Types.
