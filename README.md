@@ -14,11 +14,15 @@ This project has forked from `virtual_keyboard` project because the `virtual_key
 
 <br>
 <p align="center">
-<img style="height:350px;" alt="FlutterBlue" src="https://github.com/gurgenDP/virtual_keyboard/blob/master/screen1.png?raw=true" />
+<img style="height:200px;" alt="FlutterBlue" src="https://github.com/ahmed-eg/virtual_keyboard_multi_language/blob/master/screen3.png?raw=true" />
 </p>
 <br>
 <p align="center">
-<img style="height:350px;" alt="FlutterBlue" src="https://github.com/gurgenDP/virtual_keyboard/blob/master/screen2.png?raw=true" />
+<img style="height:200px;" alt="FlutterBlue" src="https://github.com/ahmed-eg/virtual_keyboard_multi_language/blob/master/screen4.png?raw=true" />
+</p>
+<br>
+<p align="center">
+<img style="height:200px;" alt="FlutterBlue" src="https://github.com/ahmed-eg/virtual_keyboard_multi_language/blob/master/screen2.png?raw=true" />
 </p>
 <hr>
 
