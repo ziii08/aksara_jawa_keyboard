@@ -1,4 +1,4 @@
-part of virtual_keyboard;
+part of virtual_keyboard_multi_language;
 
 /// Type for virtual keyboard key.
 ///

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:virtual_keyboard/virtual_keyboard.dart';
+import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
+import 'package:example/custom_layout.dart';
 
 void main() => runApp(MyApp());
 
@@ -27,12 +28,18 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   // Holds the text that user typed.
   String text = '';
-
+  CustomLayoutKeys _customLayoutKeys;
   // True if shift enabled.
   bool shiftEnabled = false;
 
   // is true will show the numeric keyboard.
   bool isNumericMode = true;
+
+  @override
+  void initState() {
+    _customLayoutKeys = CustomLayoutKeys();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +75,9 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Colors.deepPurple,
               child: VirtualKeyboard(
                   height: 300,
+                  width: 700,
                   textColor: Colors.white,
+                  layoutKeys: _customLayoutKeys,
                   type: isNumericMode
                       ? VirtualKeyboardType.Numeric
                       : VirtualKeyboardType.Alphanumeric,

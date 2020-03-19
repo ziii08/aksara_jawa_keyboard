@@ -1,4 +1,4 @@
-part of virtual_keyboard;
+part of virtual_keyboard_multi_language;
 
 /// Available Virtual Keyboard Types:
 /// `Numeric` - Numeric only.

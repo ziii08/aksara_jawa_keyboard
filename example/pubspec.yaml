@@ -20,7 +20,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  virtual_keyboard:
+  virtual_keyboard_multi_language:
     path: ../
 
   # The following adds the Cupertino Icons font to your application.

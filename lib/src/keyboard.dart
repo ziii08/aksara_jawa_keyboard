@@ -1,4 +1,4 @@
-part of virtual_keyboard;
+part of virtual_keyboard_multi_language;
 
 /// The default keyboard height. Can we overriden by passing
 ///  `height` argument to `VirtualKeyboard` widget.
@@ -17,11 +17,16 @@ class VirtualKeyboard extends StatefulWidget {
   /// Virtual keyboard height. Default is 300
   final double height;
 
+  /// Virtual keyboard height. Default is screen width
+  final double width;
+
   /// Color for key texts and icons.
   final Color textColor;
 
   /// Font size for keyboard keys.
   final double fontSize;
+   
+  final VirtualKeyboardLayoutKeys layoutKeys;
 
   /// The builder function will be called for each Key object.
   final Widget Function(BuildContext context, VirtualKeyboardKey key) builder;
@@ -34,6 +39,8 @@ class VirtualKeyboard extends StatefulWidget {
       @required this.type,
       @required this.onKeyPress,
       this.builder,
+      this.width,
+      this.layoutKeys,
       this.height = _virtualKeyboardDefaultHeight,
       this.textColor = Colors.black,
       this.fontSize = 14,
@@ -53,9 +60,11 @@ class _VirtualKeyboardState extends State<VirtualKeyboard> {
   // The builder function will be called for each Key object.
   Widget Function(BuildContext context, VirtualKeyboardKey key) builder;
   double height;
+  double width;
   Color textColor;
   double fontSize;
   bool alwaysCaps;
+  VirtualKeyboardLayoutKeys layoutKeys;
   // Text Style for keys.
   TextStyle textStyle;
 
@@ -69,10 +78,11 @@ class _VirtualKeyboardState extends State<VirtualKeyboard> {
       type = widget.type;
       onKeyPress = widget.onKeyPress;
       height = widget.height;
+      width = widget.width;
       textColor = widget.textColor;
       fontSize = widget.fontSize;
       alwaysCaps = widget.alwaysCaps;
-
+      layoutKeys = widget.layoutKeys ?? VirtualKeyboardLayoutKeys();
       // Init the Text Style for keys.
       textStyle = TextStyle(
         fontSize: fontSize,
@@ -85,7 +95,9 @@ class _VirtualKeyboardState extends State<VirtualKeyboard> {
   void initState() {
     super.initState();
 
+    width = widget.width;
     type = widget.type;
+    layoutKeys = widget.layoutKeys ?? VirtualKeyboardLayoutKeys();
     onKeyPress = widget.onKeyPress;
     height = widget.height;
     textColor = widget.textColor;
@@ -107,7 +119,7 @@ class _VirtualKeyboardState extends State<VirtualKeyboard> {
   Widget _alphanumeric() {
     return Container(
       height: height,
-      width: MediaQuery.of(context).size.width,
+      width: width ?? MediaQuery.of(context).size.width,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -119,7 +131,7 @@ class _VirtualKeyboardState extends State<VirtualKeyboard> {
   Widget _numeric() {
     return Container(
       height: height,
-      width: MediaQuery.of(context).size.width,
+      width: width ?? MediaQuery.of(context).size.width,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -134,7 +146,7 @@ class _VirtualKeyboardState extends State<VirtualKeyboard> {
     List<List<VirtualKeyboardKey>> keyboardRows =
         type == VirtualKeyboardType.Numeric
             ? _getKeyboardRowsNumeric()
-            : _getKeyboardRows();
+            : _getKeyboardRows(layoutKeys);
 
     // Generate keyboard row.
     List<Widget> rows = List.generate(keyboardRows.length, (int rowNum) {
@@ -198,7 +210,7 @@ class _VirtualKeyboardState extends State<VirtualKeyboard> {
         onKeyPress(key);
       },
       child: Container(
-        height: height / _keyRows.length,
+        height: height / layoutKeys.activeLayout.length,
         child: Center(
             child: Text(
           alwaysCaps
@@ -258,10 +270,26 @@ class _VirtualKeyboardState extends State<VirtualKeyboard> {
           color: textColor,
         );
         break;
+      case VirtualKeyboardKeyAction.SwithLanguage:
+        actionKey = GestureDetector(
+            onTap: () {
+              setState(() {
+                layoutKeys.switchLanguage();                
+              });
+            },
+            child: Container(
+              height: double.infinity,
+              width: double.infinity,
+              child: Icon(
+                Icons.language,
+                color: textColor,
+              ),
+            ));
+        break;
+        break;
     }
 
-    return Expanded(
-      child: InkWell(
+    var wdgt =InkWell(
         onTap: () {
           if (key.action == VirtualKeyboardKeyAction.Shift) {
             if (!alwaysCaps) {
@@ -275,10 +303,15 @@ class _VirtualKeyboardState extends State<VirtualKeyboard> {
         },
         child: Container(
           alignment: Alignment.center,
-          height: height / _keyRows.length,
+          height: height / layoutKeys.activeLayout.length,
           child: actionKey,
         ),
-      ),
-    );
+      );
+
+    if(key.action == VirtualKeyboardKeyAction.Space)
+      return SizedBox(width: (width ?? MediaQuery.of(context).size.width)/2, child:wdgt);
+    else
+      return Expanded(child:wdgt);
+
   }
 }
