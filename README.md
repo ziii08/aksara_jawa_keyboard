@@ -1,5 +1,16 @@
+# virtual_keyboard_multi_language
 
-# ************ Under developing, Please don't use now **************
+# About
+A simple package for dispaying virtual keyboards on a devices like kiosks and ATMs. The library is written in Dart and has no native code dependancy.
+
+This project has forked from `virtual_keyboard` project because the `virtual_keyboard` project built to only display a buttons on the screen with single language. However, this project will handel the events and aill supports multi-languages.
+
+# TODO List:
+- Multi-langugae support
+- Option to make a popup floating keyboard/keyNum.
+- Adding input result viewer and handel the events.
+
+
 
 <br>
 <p align="center">
@@ -11,12 +22,6 @@
 </p>
 <hr>
 
-# virtual_keyboard
-
-## Introduction
-A simple package for dispaying virtual keyboards on a devices like kiosks and ATMs. The library is written in Dart and has no native code dependancy. 
-
-Virtual keyboard provides a core set of functionality to display onscreen virtual keyboards. Managing the events sould be done on the project level. 
 
 ## Reference
 
@@ -194,7 +199,6 @@ setState(() {});
 }
 ```
 
-- [Gurgen Hovhannisyan](https://github.com/gurgenDP)
-- [Digital Pomegranate](https://digitalpomegranate.com)
+- [Ahmed El-Araby](https://github.com/ahmed-eg)
 - [LICENSE - MIT](https://github.com/gurgenDP/virtual_keyboard/blob/master/LICENSE)
 
