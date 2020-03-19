@@ -33,11 +33,14 @@ class _MyHomePageState extends State<MyHomePage> {
   bool shiftEnabled = false;
 
   // is true will show the numeric keyboard.
-  bool isNumericMode = true;
+  bool isNumericMode = false;
+
+  TextEditingController _controllerText;
 
   @override
   void initState() {
     _customLayoutKeys = CustomLayoutKeys();
+    _controllerText = TextEditingController();
     super.initState();
   }
 
@@ -53,6 +56,10 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               text,
               style: Theme.of(context).textTheme.display1,
+            ),
+            Text(
+              _controllerText.text,
+              style: TextStyle(color: Colors.red),
             ),
             SwitchListTile(
               title: Text(
@@ -75,9 +82,11 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Colors.deepPurple,
               child: VirtualKeyboard(
                   height: 300,
-                  width: 700,
+                  //width: 500,
                   textColor: Colors.white,
-                  layoutKeys: _customLayoutKeys,
+                  textController: _controllerText,
+                  //customLayoutKeys: _customLayoutKeys,                  
+                  defaultLayouts: [VirtualKeyboardDefaultLayouts.Arabic,VirtualKeyboardDefaultLayouts.English],
                   type: isNumericMode
                       ? VirtualKeyboardType.Numeric
                       : VirtualKeyboardType.Alphanumeric,

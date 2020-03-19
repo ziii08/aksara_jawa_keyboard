@@ -44,6 +44,10 @@ Function onKeyPress;
 double height;
 ```
 ```dart
+/// Virtual keyboard height. Default is full screen width
+  double width;
+```
+```dart
 // Color for key texts and icons.
 Color textColor;
 ```
@@ -54,6 +58,15 @@ double fontSize;;
 ```dart
 // Only Caps letters enabled.
 bool alwaysCaps;;
+```
+```dart
+/// the custom layout for multi or single language
+VirtualKeyboardLayoutKeys customLayoutKeys;
+```
+```dart
+/// used for multi-languages with default layouts, the default is English only
+/// will be ignored if customLayoutKeys is not null
+List<VirtualKeyboardDefaultLayouts> defaultLayouts;
 ```
 
 ### VirtualKeyboardType
@@ -114,10 +127,14 @@ Container(
             child: VirtualKeyboard(
                 // Default height is 300
                 height: 350,
+                // Default height is will screen width
+                width: 600,
                 // Default is black
                 textColor: Colors.white,
                 // Default 14
                 fontSize: 20,
+                // the layouts supported
+                defaultLayouts = [VirtualKeyboardDefaultLayouts.English],
                 // [A-Z, 0-9]
                 type: VirtualKeyboardType.Alphanumeric,
                 // Callback for key press event

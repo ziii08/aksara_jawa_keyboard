@@ -18,7 +18,7 @@
 
 * Fixed the bug with backspace key.
 
-## [0.2.0] - 19/03/2020.
+## [0.2.1] - 19/03/2020.
 
 * Adding multi-language support.
 * Customizable layout.

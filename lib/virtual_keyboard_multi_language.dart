@@ -10,3 +10,4 @@ part './src/keyboard.dart';
 part './src/rows.dart';
 part './src/type.dart';
 part './src/layout_keys.dart';
+part './src/layouts.dart';
