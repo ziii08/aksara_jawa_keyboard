@@ -225,5 +225,5 @@ setState(() {});
 ```
 
 - [Ahmed El-Araby](https://github.com/ahmed-eg)
-- [LICENSE - MIT](https://github.com/gurgenDP/virtual_keyboard/blob/master/LICENSE)
+- [LICENSE - MIT](https://github.com/ahmed-eg/virtual_keyboard_multi_language/blob/master/LICENSE)
 
