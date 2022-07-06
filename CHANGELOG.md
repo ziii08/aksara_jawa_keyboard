@@ -22,3 +22,11 @@
 
 * Adding multi-language support.
 * Customizable layout.
+
+## [0.2.4] - 19/03/2020.
+
+* Adding missing chars (ز-ج).
+
+## [1.0.1] - 06/07/2022.
+
+* null safety 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
-import 'package:example/custom_layout.dart';
 
 void main() => runApp(MyApp());
 
@@ -28,7 +27,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   // Holds the text that user typed.
   String text = '';
-  CustomLayoutKeys _customLayoutKeys;
+  // CustomLayoutKeys _customLayoutKeys;
   // True if shift enabled.
   bool shiftEnabled = false;
 
@@ -39,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    _customLayoutKeys = CustomLayoutKeys();
+    // _customLayoutKeys = CustomLayoutKeys();
     _controllerText = TextEditingController();
     super.initState();
   }
@@ -55,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Text(
               text,
-              style: Theme.of(context).textTheme.display1,
+              style: Theme.of(context).textTheme.bodyText1,
             ),
             Text(
               _controllerText.text,
@@ -85,8 +84,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   //width: 500,
                   textColor: Colors.white,
                   textController: _controllerText,
-                  //customLayoutKeys: _customLayoutKeys,                  
-                  defaultLayouts: [VirtualKeyboardDefaultLayouts.Arabic,VirtualKeyboardDefaultLayouts.English],
+                  //customLayoutKeys: _customLayoutKeys,
+                  defaultLayouts: [
+                    VirtualKeyboardDefaultLayouts.Arabic,
+                    VirtualKeyboardDefaultLayouts.English
+                  ],
                   //reverseLayout :true,
                   type: isNumericMode
                       ? VirtualKeyboardType.Numeric
