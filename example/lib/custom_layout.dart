@@ -1,21 +1,18 @@
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
-class CustomLayoutKeys extends VirtualKeyboardLayoutKeys{
-
+class CustomLayoutKeys extends VirtualKeyboardLayoutKeys {
   @override
   int getLanguagesCount() => 2;
 
-  List<List> getLanguage(int index){
-    switch(index){
-      case 1: 
-      return _arabicLayout;
+  List<List> getLanguage(int index) {
+    switch (index) {
+      case 1:
+        return _arabicLayout;
       default:
-      return defaultEnglishLayout;
+        return defaultEnglishLayout;
     }
   }
-
 }
-
 
 const List<List> _arabicLayout = [
   // Row 1
