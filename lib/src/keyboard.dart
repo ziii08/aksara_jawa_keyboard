@@ -340,6 +340,13 @@ class _VirtualKeyboardState extends State<VirtualKeyboard> {
               ),
             ));
         break;
+
+      case VirtualKeyboardKeyAction.Confirm:
+        actionKey = Icon(
+          Icons.check_circle_rounded,
+          color: textColor,
+        );
+        break;
     }
 
     var wdgt = InkWell(

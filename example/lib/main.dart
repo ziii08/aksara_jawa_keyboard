@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
@@ -25,21 +27,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // Holds the text that user typed.
-  String text = '';
-  // CustomLayoutKeys _customLayoutKeys;
-  // True if shift enabled.
-  bool shiftEnabled = false;
+  final _controllerText1 = TextEditingController();
+  final _controllerText2 = TextEditingController();
+  final _controllerText3 = TextEditingController();
 
-  // is true will show the numeric keyboard.
-  bool isNumericMode = false;
-
-  late TextEditingController _controllerText;
+  // AppKeyboard States
+  List<FocusNode> focusNodes = List.generate(2, (index) => FocusNode());
+  TextEditingController _keyboardTextController = TextEditingController();
+  VirtualKeyboardType _keyboardType = VirtualKeyboardType.Alphanumeric;
 
   @override
   void initState() {
-    // _customLayoutKeys = CustomLayoutKeys();
-    _controllerText = TextEditingController();
     super.initState();
   }
 
@@ -52,78 +50,52 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           children: <Widget>[
-            Text(
-              text,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            Text(
-              _controllerText.text,
-              style: TextStyle(color: Colors.red),
-            ),
-            SwitchListTile(
-              title: Text(
-                'Keyboard Type = ' +
-                    (isNumericMode
-                        ? 'VirtualKeyboardType.Numeric'
-                        : 'VirtualKeyboardType.Alphanumeric'),
+            TextFormField(
+              focusNode: focusNodes[0],
+              controller: _controllerText1,
+              keyboardType: TextInputType.none,
+              decoration: InputDecoration(
+                labelText: 'This is Number',
               ),
-              value: isNumericMode,
-              onChanged: (val) {
-                setState(() {
-                  isNumericMode = val;
-                });
+              onTap: () {
+                log('Field with focus1 tapped');
+                _keyboardTextController = _controllerText1;
+                _keyboardType = VirtualKeyboardType.Numeric;
+                setState(() {});
               },
+            ),
+            TextFormField(
+              focusNode: focusNodes[1],
+              controller: _controllerText2,
+              keyboardType: TextInputType.none,
+              decoration: InputDecoration(
+                labelText: 'This is AlphaNumeric',
+              ),
+              onTap: () {
+                log('Field with focus2 tapped');
+                _keyboardTextController = _controllerText2;
+                _keyboardType = VirtualKeyboardType.Alphanumeric;
+                setState(() {});
+              },
+            ),
+            TextFormField(
+              controller: _controllerText3,
+              decoration: InputDecoration(
+                labelText: 'Field wihout focus',
+              ),
             ),
             Expanded(
               child: Container(),
             ),
-            Container(
-              color: Colors.deepPurple,
-              child: VirtualKeyboard(
-                  height: 300,
-                  //width: 500,
-                  textColor: Colors.white,
-                  textController: _controllerText,
-                  //customLayoutKeys: _customLayoutKeys,
-                  defaultLayouts: [
-                    VirtualKeyboardDefaultLayouts.Arabic,
-                    VirtualKeyboardDefaultLayouts.English
-                  ],
-                  //reverseLayout :true,
-                  type: isNumericMode
-                      ? VirtualKeyboardType.Numeric
-                      : VirtualKeyboardType.Alphanumeric,
-                  onKeyPress: _onKeyPress),
-            )
+            Text('Tap on the text fields to show the keyboard'),
+            AppKeyboard(
+              focusNodes: focusNodes,
+              textController: _keyboardTextController,
+              keyboardType: _keyboardType,
+            ),
           ],
         ),
       ),
     );
-  }
-
-  /// Fired when the virtual keyboard key is pressed.
-  _onKeyPress(VirtualKeyboardKey key) {
-    if (key.keyType == VirtualKeyboardKeyType.String) {
-      text = text + ((shiftEnabled ? key.capsText : key.text) ?? '');
-    } else if (key.keyType == VirtualKeyboardKeyType.Action) {
-      switch (key.action) {
-        case VirtualKeyboardKeyAction.Backspace:
-          if (text.length == 0) return;
-          text = text.substring(0, text.length - 1);
-          break;
-        case VirtualKeyboardKeyAction.Return:
-          text = text + '\n';
-          break;
-        case VirtualKeyboardKeyAction.Space:
-          text = text + (key.text ?? '');
-          break;
-        case VirtualKeyboardKeyAction.Shift:
-          shiftEnabled = !shiftEnabled;
-          break;
-        default:
-      }
-    }
-    // Update the screen
-    setState(() {});
   }
 }

@@ -22,7 +22,7 @@ const List<List> _keyRowsNumeric = [
   ],
   // Row 1
   const [
-    '.',
+    // '.',
     '0',
   ],
 ];
@@ -86,14 +86,22 @@ List<List<VirtualKeyboardKey>> _getKeyboardRowsNumeric() {
     switch (rowNum) {
       case 3:
         // String keys.
-        rowKeys.addAll(_getKeyboardRowKeysNumeric(rowNum));
 
         // Right Shift
         rowKeys.add(
           VirtualKeyboardKey(
               keyType: VirtualKeyboardKeyType.Action,
+              action: VirtualKeyboardKeyAction.Confirm),
+        );
+
+        rowKeys.addAll(_getKeyboardRowKeysNumeric(rowNum));
+
+        rowKeys.add(
+          VirtualKeyboardKey(
+              keyType: VirtualKeyboardKeyType.Action,
               action: VirtualKeyboardKeyAction.Backspace),
         );
+
         break;
       default:
         rowKeys = _getKeyboardRowKeysNumeric(rowNum);
