@@ -2,18 +2,24 @@ part of virtual_keyboard_multi_language;
 
 class AppKeyboard extends StatefulWidget {
   final List<FocusNode> focusNodes;
-  final TextEditingController textController;
-  final VirtualKeyboardType keyboardType;
+  final List<TextEditingController> textControllers;
+  final List<VirtualKeyboardType> keyboardTypes;
+  final Duration showDuration;
   final Color foregroundColor;
   final Color backgroundColor;
+  final double fontSize;
+  final double height;
 
   AppKeyboard({
     Key? key,
     required this.focusNodes,
-    required this.textController,
-    this.keyboardType = VirtualKeyboardType.Numeric,
+    required this.textControllers,
+    required this.keyboardTypes,
+    this.showDuration = const Duration(milliseconds: 250),
     this.foregroundColor = Colors.black,
     this.backgroundColor = const Color(0xFFe3f2fd),
+    this.fontSize = 20,
+    this.height = 250,
   });
 
   @override
@@ -29,15 +35,23 @@ class _AppKeyboardState extends State<AppKeyboard>
   double height = 0;
 
   late FocusNode currentFocus;
+  late TextEditingController currentTextController;
+  late VirtualKeyboardType currentKeyboardType;
 
   @override
   void initState() {
     super.initState();
+
     widget.focusNodes.map((e) {
       e.addListener(() {
         if (e.hasFocus) {
           isShow = true;
-          height = 250;
+          height = widget.height;
+          currentFocus = e;
+          currentTextController =
+              widget.textControllers[widget.focusNodes.indexOf(e)];
+          currentKeyboardType =
+              widget.keyboardTypes[widget.focusNodes.indexOf(e)];
           setState(() {});
         } else {
           isShow = false;
@@ -57,7 +71,7 @@ class _AppKeyboardState extends State<AppKeyboard>
   @override
   Widget build(BuildContext context) {
     return AnimatedSize(
-      duration: Duration(milliseconds: 300),
+      duration: widget.showDuration,
       alignment: Alignment.topCenter,
       child: Container(
         height: height,
@@ -65,13 +79,14 @@ class _AppKeyboardState extends State<AppKeyboard>
         child: !isShow
             ? null
             : VirtualKeyboard(
-                height: 250,
+                height: widget.height,
+                fontSize: widget.fontSize,
                 textColor: widget.foregroundColor,
-                textController: widget.textController,
+                textController: currentTextController,
                 defaultLayouts: [
                   VirtualKeyboardDefaultLayouts.Colposcopy,
                 ],
-                type: widget.keyboardType,
+                type: currentKeyboardType,
                 onKeyPress: _onKeyPress,
               ),
       ),

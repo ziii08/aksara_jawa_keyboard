@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
@@ -28,13 +26,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final _controllerText1 = TextEditingController();
+  final _focusNodeText1 = FocusNode();
+  final _keyboardTypeText1 = VirtualKeyboardType.Numeric;
   final _controllerText2 = TextEditingController();
+  final _focusNodeText2 = FocusNode();
+  final _keyboardTypeText2 = VirtualKeyboardType.Alphanumeric;
   final _controllerText3 = TextEditingController();
-
-  // AppKeyboard States
-  List<FocusNode> focusNodes = List.generate(2, (index) => FocusNode());
-  TextEditingController _keyboardTextController = TextEditingController();
-  VirtualKeyboardType _keyboardType = VirtualKeyboardType.Alphanumeric;
 
   @override
   void initState() {
@@ -51,32 +48,20 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           children: <Widget>[
             TextFormField(
-              focusNode: focusNodes[0],
+              focusNode: _focusNodeText1,
               controller: _controllerText1,
               keyboardType: TextInputType.none,
               decoration: InputDecoration(
                 labelText: 'This is Number',
               ),
-              onTap: () {
-                log('Field with focus1 tapped');
-                _keyboardTextController = _controllerText1;
-                _keyboardType = VirtualKeyboardType.Numeric;
-                setState(() {});
-              },
             ),
             TextFormField(
-              focusNode: focusNodes[1],
+              focusNode: _focusNodeText2,
               controller: _controllerText2,
               keyboardType: TextInputType.none,
               decoration: InputDecoration(
                 labelText: 'This is AlphaNumeric',
               ),
-              onTap: () {
-                log('Field with focus2 tapped');
-                _keyboardTextController = _controllerText2;
-                _keyboardType = VirtualKeyboardType.Alphanumeric;
-                setState(() {});
-              },
             ),
             TextFormField(
               controller: _controllerText3,
@@ -89,9 +74,9 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text('Tap on the text fields to show the keyboard'),
             AppKeyboard(
-              focusNodes: focusNodes,
-              textController: _keyboardTextController,
-              keyboardType: _keyboardType,
+              focusNodes: [_focusNodeText1, _focusNodeText2],
+              textControllers: [_controllerText1, _controllerText2],
+              keyboardTypes: [_keyboardTypeText1, _keyboardTypeText2],
             ),
           ],
         ),
