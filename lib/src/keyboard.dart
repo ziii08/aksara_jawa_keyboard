@@ -88,14 +88,24 @@ class _VirtualKeyboardState extends State<VirtualKeyboard> {
   bool isShiftEnabled = false;
 
   void _onKeyPress(VirtualKeyboardKey key) {
+    var cursorPos = textController.selection.base.offset;
     if (key.keyType == VirtualKeyboardKeyType.String) {
-      textController.text += ((isShiftEnabled ? key.capsText : key.text) ?? '');
+      textController.text = textController.text.substring(0, cursorPos) +
+          ((isShiftEnabled ? key.capsText : key.text) ?? '') +
+          textController.text.substring(cursorPos);
+      // set cursor position
+      textController.selection =
+          TextSelection.fromPosition(TextPosition(offset: cursorPos + 1));
     } else if (key.keyType == VirtualKeyboardKeyType.Action) {
       switch (key.action) {
         case VirtualKeyboardKeyAction.Backspace:
           if (textController.text.length == 0) return;
           textController.text =
-              textController.text.substring(0, textController.text.length - 1);
+              textController.text.substring(0, cursorPos - 1) +
+                  textController.text.substring(cursorPos);
+          // set cursor position
+          textController.selection =
+              TextSelection.fromPosition(TextPosition(offset: cursorPos - 1));
           break;
         case VirtualKeyboardKeyAction.Return:
           textController.text += '\n';
