@@ -33,6 +33,7 @@ class _AppKeyboardState extends State<AppKeyboard>
   bool isNumericMode = false;
   bool isShow = false;
   double height = 0;
+  bool isMaintainKeyboard = false;
 
   late FocusNode currentFocus;
   late TextEditingController currentTextController;
@@ -43,7 +44,7 @@ class _AppKeyboardState extends State<AppKeyboard>
     super.initState();
 
     widget.focusNodes.map((e) {
-      e.addListener(() {
+      e.addListener(() async {
         if (e.hasFocus) {
           isShow = true;
           height = widget.height;
@@ -53,6 +54,10 @@ class _AppKeyboardState extends State<AppKeyboard>
           currentKeyboardType =
               widget.keyboardTypes[widget.focusNodes.indexOf(e)];
           setState(() {});
+        } else {
+          await Future.delayed(Duration(milliseconds: 100));
+          if (currentFocus.hasFocus || isMaintainKeyboard) return;
+          closeKeyboard();
         }
       });
     }).toList();
@@ -74,27 +79,38 @@ class _AppKeyboardState extends State<AppKeyboard>
     super.dispose();
   }
 
+  void closeKeyboard() {
+    FocusScope.of(context).unfocus();
+    isShow = false;
+    height = 0;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    return AnimatedSize(
-      duration: widget.showDuration,
-      alignment: Alignment.topCenter,
-      child: Container(
-        height: height,
-        color: widget.backgroundColor,
-        child: !isShow
-            ? null
-            : VirtualKeyboard(
-                height: widget.height,
-                fontSize: widget.fontSize,
-                textColor: widget.foregroundColor,
-                textController: currentTextController,
-                defaultLayouts: [
-                  VirtualKeyboardDefaultLayouts.Colposcopy,
-                ],
-                type: currentKeyboardType,
-                onKeyPress: _onKeyPress,
-              ),
+    return GestureDetector(
+      onTapDown: (details) => isMaintainKeyboard = true,
+      onTapCancel: () => isMaintainKeyboard = false,
+      child: AnimatedSize(
+        duration: widget.showDuration,
+        alignment: Alignment.topCenter,
+        child: Container(
+          height: height,
+          color: widget.backgroundColor,
+          child: !isShow
+              ? null
+              : VirtualKeyboard(
+                  height: widget.height,
+                  fontSize: widget.fontSize,
+                  textColor: widget.foregroundColor,
+                  textController: currentTextController,
+                  defaultLayouts: [
+                    VirtualKeyboardDefaultLayouts.Colposcopy,
+                  ],
+                  type: currentKeyboardType,
+                  onKeyPress: _onKeyPress,
+                ),
+        ),
       ),
     );
   }
@@ -103,9 +119,6 @@ class _AppKeyboardState extends State<AppKeyboard>
     currentFocus.requestFocus();
     if (key.keyType != VirtualKeyboardKeyType.Action) return;
     if (key.action != VirtualKeyboardKeyAction.Confirm) return;
-    FocusScope.of(context).unfocus();
-    isShow = false;
-    height = 0;
-    setState(() {});
+    closeKeyboard();
   }
 }

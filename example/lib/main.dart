@@ -72,6 +72,12 @@ class _MyHomePageState extends State<MyHomePage> {
             Expanded(
               child: Container(),
             ),
+            FilledButton(
+              onPressed: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: Text('Unfocus'),
+            ),
             Text('Tap on the text fields to show the keyboard'),
             AppKeyboard(
               focusNodes: [_focusNodeText1, _focusNodeText2],

@@ -4,7 +4,7 @@ part of virtual_keyboard_multi_language;
 ///  `height` argument to `VirtualKeyboard` widget.
 const double _virtualKeyboardDefaultHeight = 300;
 
-const int _virtualKeyboardBackspaceEventPerioud = 250;
+const int _virtualKeyboardBackspaceEventPerioud = 100;
 
 /// Virtual Keyboard widget.
 class VirtualKeyboard extends StatefulWidget {
@@ -313,7 +313,18 @@ class _VirtualKeyboardState extends State<VirtualKeyboard> {
             ));
         break;
       case VirtualKeyboardKeyAction.Shift:
-        actionKey = Icon(Icons.arrow_upward, color: textColor);
+        actionKey = Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Shift', style: TextStyle(fontSize: 12)),
+            SizedBox(width: 5),
+            Icon(
+              isShiftEnabled ? Icons.arrow_downward : Icons.arrow_upward,
+              color: textColor,
+              size: 18,
+            ),
+          ],
+        );
         break;
       case VirtualKeyboardKeyAction.Space:
         actionKey = actionKey = Icon(Icons.space_bar, color: textColor);
@@ -369,8 +380,11 @@ class _VirtualKeyboardState extends State<VirtualKeyboard> {
     );
 
     if (key.action == VirtualKeyboardKeyAction.Space)
-      return SizedBox(
-          width: (width ?? MediaQuery.of(context).size.width) / 2, child: wdgt);
+      return Expanded(flex: 6, child: wdgt);
+    else if (key.action == VirtualKeyboardKeyAction.Confirm ||
+        key.action == VirtualKeyboardKeyAction.Shift ||
+        key.action == VirtualKeyboardKeyAction.Backspace)
+      return Expanded(flex: 2, child: wdgt);
     else
       return Expanded(child: wdgt);
   }

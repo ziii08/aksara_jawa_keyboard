@@ -150,10 +150,10 @@ const List<List> _defaultColposcopyLayout = [
     // ';',
     // '\'',
     // VirtualKeyboardKeyAction.Return
+    VirtualKeyboardKeyAction.Backspace
   ],
   // Row 4
   const [
-    VirtualKeyboardKeyAction.Shift,
     'z',
     'x',
     'c',
@@ -164,7 +164,7 @@ const List<List> _defaultColposcopyLayout = [
     ',',
     '.',
     '/',
-    VirtualKeyboardKeyAction.Backspace
+    VirtualKeyboardKeyAction.Shift,
   ],
   // Row 5
   const [
