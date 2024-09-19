@@ -53,10 +53,6 @@ class _AppKeyboardState extends State<AppKeyboard>
           currentKeyboardType =
               widget.keyboardTypes[widget.focusNodes.indexOf(e)];
           setState(() {});
-        } else {
-          isShow = false;
-          height = 0;
-          setState(() {});
         }
       });
     }).toList();
@@ -64,7 +60,17 @@ class _AppKeyboardState extends State<AppKeyboard>
 
   @override
   void dispose() {
+    FocusScope.of(context).unfocus();
+    isShow = false;
+    height = 0;
+
     _controller.dispose();
+    widget.focusNodes.map((e) {
+      e.dispose();
+    }).toList();
+    widget.textControllers.map((e) {
+      e.dispose();
+    }).toList();
     super.dispose();
   }
 
@@ -94,9 +100,12 @@ class _AppKeyboardState extends State<AppKeyboard>
   }
 
   _onKeyPress(VirtualKeyboardKey key) {
+    currentFocus.requestFocus();
     if (key.keyType != VirtualKeyboardKeyType.Action) return;
     if (key.action != VirtualKeyboardKeyAction.Confirm) return;
     FocusScope.of(context).unfocus();
+    isShow = false;
+    height = 0;
     setState(() {});
   }
 }
