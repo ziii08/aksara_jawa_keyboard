@@ -26,9 +26,7 @@ class AppKeyboard extends StatefulWidget {
   _AppKeyboardState createState() => _AppKeyboardState();
 }
 
-class _AppKeyboardState extends State<AppKeyboard>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+class _AppKeyboardState extends State<AppKeyboard> {
   bool shiftEnabled = false;
   bool isNumericMode = false;
   bool isShow = false;
@@ -65,17 +63,8 @@ class _AppKeyboardState extends State<AppKeyboard>
 
   @override
   void dispose() {
-    FocusScope.of(context).unfocus();
     isShow = false;
     height = 0;
-
-    _controller.dispose();
-    widget.focusNodes.map((e) {
-      e.dispose();
-    }).toList();
-    widget.textControllers.map((e) {
-      e.dispose();
-    }).toList();
     super.dispose();
   }
 
