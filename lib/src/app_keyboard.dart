@@ -9,6 +9,7 @@ class AppKeyboard extends StatefulWidget {
   final Color backgroundColor;
   final double fontSize;
   final double height;
+  final void Function(bool isShow) onShow;
 
   AppKeyboard({
     Key? key,
@@ -20,6 +21,7 @@ class AppKeyboard extends StatefulWidget {
     this.backgroundColor = const Color(0xFFe3f2fd),
     this.fontSize = 20,
     this.height = 250,
+    required this.onShow,
   });
 
   @override
@@ -45,6 +47,7 @@ class _AppKeyboardState extends State<AppKeyboard> {
       e.addListener(() async {
         if (e.hasFocus) {
           isShow = true;
+          widget.onShow(isShow);
           height = widget.height;
           currentFocus = e;
           currentTextController =
@@ -64,6 +67,7 @@ class _AppKeyboardState extends State<AppKeyboard> {
   @override
   void dispose() {
     isShow = false;
+    widget.onShow(isShow);
     height = 0;
     super.dispose();
   }
@@ -71,6 +75,7 @@ class _AppKeyboardState extends State<AppKeyboard> {
   void closeKeyboard() {
     FocusScope.of(context).unfocus();
     isShow = false;
+    widget.onShow(isShow);
     height = 0;
     setState(() {});
   }

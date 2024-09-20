@@ -83,6 +83,9 @@ class _MyHomePageState extends State<MyHomePage> {
               focusNodes: [_focusNodeText1, _focusNodeText2],
               textControllers: [_controllerText1, _controllerText2],
               keyboardTypes: [_keyboardTypeText1, _keyboardTypeText2],
+              onShow: (isShow) {
+                print('Keyboard is ${isShow ? 'visible' : 'hidden'}');
+              },
             ),
           ],
         ),
