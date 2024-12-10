@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
 export "FLUTTER_ROOT=/Users/zenmedrid/Development/flutter"
-export "FLUTTER_APPLICATION_PATH=/Volumes/Transcend/flutter-test/virtual_keyboard/example"
+export "FLUTTER_APPLICATION_PATH=/Users/zenmedrid/Documents/Projects/Handheld Colposcopy Camera/virtual_keyboard/example"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_TARGET=lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"

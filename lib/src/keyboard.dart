@@ -390,7 +390,7 @@ class _VirtualKeyboardState extends State<VirtualKeyboard> {
     );
 
     if (key.action == VirtualKeyboardKeyAction.Space)
-      return Expanded(flex: 6, child: wdgt);
+      return Expanded(flex: 5, child: wdgt);
     else if (key.action == VirtualKeyboardKeyAction.Confirm ||
         key.action == VirtualKeyboardKeyAction.Shift ||
         key.action == VirtualKeyboardKeyAction.Backspace)

@@ -172,6 +172,7 @@ const List<List> _defaultColposcopyLayout = [
     VirtualKeyboardKeyAction.Space,
     '&',
     '_',
+    '-',
     VirtualKeyboardKeyAction.Confirm
   ]
 ];
