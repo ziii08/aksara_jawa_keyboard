@@ -2,7 +2,7 @@
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
+import 'package:in_app_keyboard/in_app_keyboard.dart';
 
 void main() => runApp(MyApp());
 

@@ -1,4 +1,4 @@
-library virtual_keyboard_multi_language;
+library in_app_keyboard;
 
 import 'dart:async';
 import 'package:flutter/material.dart';

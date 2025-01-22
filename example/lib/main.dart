@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
+import 'package:in_app_keyboard/in_app_keyboard.dart';
 
 void main() => runApp(MyApp());
 
@@ -7,11 +7,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Virtual Keyboard Demo',
+      title: 'In App Keyboard Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Virtual Keyboard Demo'),
+      home: MyHomePage(title: 'In App Keyboard Demo'),
     );
   }
 }
@@ -27,10 +27,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final _controllerText1 = TextEditingController();
   final _focusNodeText1 = FocusNode();
-  final _keyboardTypeText1 = VirtualKeyboardType.Numeric;
+  final _keyboardTypeText1 = KeyboardType.Numeric;
   final _controllerText2 = TextEditingController();
   final _focusNodeText2 = FocusNode();
-  final _keyboardTypeText2 = VirtualKeyboardType.Alphanumeric;
+  final _keyboardTypeText2 = KeyboardType.Alphanumeric;
   final _controllerText3 = TextEditingController();
 
   @override

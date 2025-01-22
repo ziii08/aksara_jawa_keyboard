@@ -1,3 +1,3 @@
-part of virtual_keyboard_multi_language;
+part of in_app_keyboard;
 
-enum VirtualKeyboardDefaultLayouts { Arabic, Colposcopy, English }
+enum KeyboardDefaultLayouts { Arabic, English }

@@ -1,6 +1,6 @@
-import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
+import 'package:in_app_keyboard/in_app_keyboard.dart';
 
-class CustomLayoutKeys extends VirtualKeyboardLayoutKeys {
+class CustomLayoutKeys extends KeyboardLayoutKeys {
   @override
   int getLanguagesCount() => 2;
 
@@ -41,7 +41,7 @@ const List<List> _arabicLayout = [
     'خ',
     'ح',
     'د',
-    VirtualKeyboardKeyAction.Backspace
+    KeyAction.Backspace
   ],
   // Row 3
   const [
@@ -56,7 +56,7 @@ const List<List> _arabicLayout = [
     'م',
     'ك',
     'ط',
-    VirtualKeyboardKeyAction.Return
+    KeyAction.Return
   ],
   // Row 4
   const [
@@ -71,13 +71,13 @@ const List<List> _arabicLayout = [
     'و',
     '.',
     'ظ',
-    VirtualKeyboardKeyAction.Shift
+    KeyAction.Shift
   ],
   // Row 5
   const [
-    VirtualKeyboardKeyAction.SwithLanguage,
+    KeyAction.SwithLanguage,
     '@',
-    VirtualKeyboardKeyAction.Space,
+    KeyAction.Space,
     '-',
     '_',
   ]

@@ -1,7 +1,6 @@
-part of virtual_keyboard_multi_language;
-//import '../virtual_keyboard_multi_language.dart';
+part of in_app_keyboard;
 
-abstract class VirtualKeyboardLayoutKeys {
+abstract class KeyboardLayoutKeys {
   int activeIndex = 0;
 
   List<List> get defaultEnglishLayout => _defaultEnglishLayout;
@@ -19,19 +18,17 @@ abstract class VirtualKeyboardLayoutKeys {
   }
 }
 
-class VirtualKeyboardDefaultLayoutKeys extends VirtualKeyboardLayoutKeys {
-  List<VirtualKeyboardDefaultLayouts> defaultLayouts;
-  VirtualKeyboardDefaultLayoutKeys(this.defaultLayouts);
+class KeyboardDefaultLayoutKeys extends KeyboardLayoutKeys {
+  List<KeyboardDefaultLayouts> defaultLayouts;
+  KeyboardDefaultLayoutKeys(this.defaultLayouts);
 
   int getLanguagesCount() => defaultLayouts.length;
 
   List<List> getLanguage(int index) {
     switch (defaultLayouts[index]) {
-      case VirtualKeyboardDefaultLayouts.English:
+      case KeyboardDefaultLayouts.English:
         return _defaultEnglishLayout;
-      case VirtualKeyboardDefaultLayouts.Colposcopy:
-        return _defaultColposcopyLayout;
-      case VirtualKeyboardDefaultLayouts.Arabic:
+      case KeyboardDefaultLayouts.Arabic:
         return _defaultArabicLayout;
       default:
     }
@@ -39,7 +36,6 @@ class VirtualKeyboardDefaultLayoutKeys extends VirtualKeyboardLayoutKeys {
   }
 }
 
-/// Keys for Virtual Keyboard's rows.
 const List<List> _defaultEnglishLayout = [
   // Row 1
   const [
@@ -66,75 +62,6 @@ const List<List> _defaultEnglishLayout = [
     'i',
     'o',
     'p',
-    VirtualKeyboardKeyAction.Backspace
-  ],
-  // Row 3
-  const [
-    'a',
-    's',
-    'd',
-    'f',
-    'g',
-    'h',
-    'j',
-    'k',
-    'l',
-    ';',
-    '\'',
-    VirtualKeyboardKeyAction.Return
-  ],
-  // Row 4
-  const [
-    VirtualKeyboardKeyAction.Shift,
-    'z',
-    'x',
-    'c',
-    'v',
-    'b',
-    'n',
-    'm',
-    ',',
-    '.',
-    '/',
-    VirtualKeyboardKeyAction.Shift,
-  ],
-  // Row 5
-  const [
-    VirtualKeyboardKeyAction.SwithLanguage,
-    '@',
-    VirtualKeyboardKeyAction.Space,
-    '&',
-    '_',
-  ]
-];
-
-const List<List> _defaultColposcopyLayout = [
-  // Row 1
-  const [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '0',
-  ],
-  // Row 2
-  const [
-    'q',
-    'w',
-    'e',
-    'r',
-    't',
-    'y',
-    'u',
-    'i',
-    'o',
-    'p',
-    // VirtualKeyboardKeyAction.Backspace
   ],
   // Row 3
   const [
@@ -149,8 +76,7 @@ const List<List> _defaultColposcopyLayout = [
     'l',
     // ';',
     // '\'',
-    // VirtualKeyboardKeyAction.Return
-    VirtualKeyboardKeyAction.Backspace
+    KeyAction.Backspace
   ],
   // Row 4
   const [
@@ -164,16 +90,17 @@ const List<List> _defaultColposcopyLayout = [
     ',',
     '.',
     '/',
-    VirtualKeyboardKeyAction.Shift,
+    KeyAction.Shift,
   ],
   // Row 5
   const [
+    KeyAction.SwithLanguage,
     '@',
-    VirtualKeyboardKeyAction.Space,
+    KeyAction.Space,
     '&',
     '_',
     '-',
-    VirtualKeyboardKeyAction.Confirm
+    KeyAction.Confirm,
   ]
 ];
 
@@ -205,7 +132,7 @@ const List<List> _defaultArabicLayout = [
     'ح',
     'ج',
     'د',
-    VirtualKeyboardKeyAction.Backspace
+    KeyAction.Backspace
   ],
   // Row 3
   const [
@@ -220,7 +147,7 @@ const List<List> _defaultArabicLayout = [
     'م',
     'ك',
     'ط',
-    VirtualKeyboardKeyAction.Return
+    KeyAction.Return
   ],
   // Row 4
   const [
@@ -235,13 +162,13 @@ const List<List> _defaultArabicLayout = [
     'و',
     'ز',
     'ظ',
-    VirtualKeyboardKeyAction.Shift
+    KeyAction.Shift
   ],
   // Row 5
   const [
-    VirtualKeyboardKeyAction.SwithLanguage,
+    KeyAction.SwithLanguage,
     '@',
-    VirtualKeyboardKeyAction.Space,
+    KeyAction.Space,
     '-',
     '.',
     '_',

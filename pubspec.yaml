@@ -1,8 +1,7 @@
-name: virtual_keyboard_multi_language
-description: A simple package for dispaying virtual keyboards on a devices like kiosks and ATMs. The library is written in Dart and has no native code dependancy. 
-version: 1.1.0
-#author: Ahmed El-Araby <ahmed-eg@live.com>
-homepage: https://github.com/ahmed-eg/virtual_keyboard_multi_language
+name: in_app_keyboard
+description: A simple package for dispaying in-app keyboard on a devices like kiosk, flutter Linux, and Raspberry PI that dont have native keyboards.
+version: 1.0.0
+homepage: https://github.com/efraglobal/in_app_keyboard
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -15,10 +14,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-# For information on the generic Dart part of this file, see the
-# following page: https://www.dartlang.org/tools/pub/pubspec
-
-# The following section is specific to Flutter.
 flutter:
 
   # To add assets to your package, add an assets section, like this:

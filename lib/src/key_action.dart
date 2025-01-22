@@ -1,11 +1,11 @@
-part of virtual_keyboard_multi_language;
+part of in_app_keyboard;
 
 /// Virtual keyboard actions.
-enum VirtualKeyboardKeyAction {
+enum KeyAction {
   Backspace,
   Return,
   Shift,
   Space,
   SwithLanguage,
-  Confirm
+  Confirm,
 }

@@ -1,9 +1,10 @@
-part of virtual_keyboard_multi_language;
+part of in_app_keyboard;
 
 class AppKeyboard extends StatefulWidget {
   final List<FocusNode> focusNodes;
   final List<TextEditingController> textControllers;
-  final List<VirtualKeyboardType> keyboardTypes;
+  final List<KeyboardType> keyboardTypes;
+  final List<KeyboardDefaultLayouts> defaultLayouts;
   final Duration showDuration;
   final Color foregroundColor;
   final Color backgroundColor;
@@ -16,6 +17,10 @@ class AppKeyboard extends StatefulWidget {
     required this.focusNodes,
     required this.textControllers,
     required this.keyboardTypes,
+    this.defaultLayouts = const [
+      KeyboardDefaultLayouts.English,
+      KeyboardDefaultLayouts.Arabic,
+    ],
     this.showDuration = const Duration(milliseconds: 250),
     this.foregroundColor = Colors.black,
     this.backgroundColor = const Color(0xFFe3f2fd),
@@ -37,7 +42,7 @@ class _AppKeyboardState extends State<AppKeyboard> {
 
   late FocusNode currentFocus;
   late TextEditingController currentTextController;
-  late VirtualKeyboardType currentKeyboardType;
+  late KeyboardType currentKeyboardType;
 
   @override
   void initState() {
@@ -93,14 +98,12 @@ class _AppKeyboardState extends State<AppKeyboard> {
           color: widget.backgroundColor,
           child: !isShow
               ? null
-              : VirtualKeyboard(
+              : Keyboard(
                   height: widget.height,
                   fontSize: widget.fontSize,
                   textColor: widget.foregroundColor,
                   textController: currentTextController,
-                  defaultLayouts: [
-                    VirtualKeyboardDefaultLayouts.Colposcopy,
-                  ],
+                  defaultLayouts: widget.defaultLayouts,
                   type: currentKeyboardType,
                   onKeyPress: _onKeyPress,
                 ),
@@ -109,10 +112,10 @@ class _AppKeyboardState extends State<AppKeyboard> {
     );
   }
 
-  _onKeyPress(VirtualKeyboardKey key) {
+  _onKeyPress(KeyboardKey key) {
     currentFocus.requestFocus();
-    if (key.keyType != VirtualKeyboardKeyType.Action) return;
-    if (key.action != VirtualKeyboardKeyAction.Confirm) return;
+    if (key.keyType != KeyboardKeyType.Action) return;
+    if (key.action != KeyAction.Confirm) return;
     closeKeyboard();
   }
 }
