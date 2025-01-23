@@ -89,6 +89,11 @@ class _KeyboardState extends State<Keyboard> {
 
   void _onKeyPress(KeyboardKey key) {
     var cursorPos = textController.selection.base.offset;
+    // Jika posisi kursor tidak valid, atur kursor ke akhir teks.
+    if (cursorPos < 0) {
+      cursorPos = textController.text.length;
+    }
+
     if (key.keyType == KeyboardKeyType.String) {
       textController.text = textController.text.substring(0, cursorPos) +
           ((isShiftEnabled ? key.capsText : key.text) ?? '') +
@@ -99,13 +104,16 @@ class _KeyboardState extends State<Keyboard> {
     } else if (key.keyType == KeyboardKeyType.Action) {
       switch (key.action) {
         case KeyAction.Backspace:
-          if (textController.text.length == 0) return;
-          textController.text =
-              textController.text.substring(0, cursorPos - 1) +
-                  textController.text.substring(cursorPos);
-          // set cursor position
-          textController.selection =
-              TextSelection.fromPosition(TextPosition(offset: cursorPos - 1));
+          if (textController.text.isNotEmpty && cursorPos > 0) {
+            // Periksa apakah hanya ada satu karakter atau kursor ada di posisi pertama.
+            textController.text =
+                textController.text.substring(0, cursorPos - 1) +
+                    textController.text.substring(cursorPos);
+            // set cursor position
+            textController.selection =
+                TextSelection.fromPosition(TextPosition(offset: cursorPos - 1));
+          }
+
           break;
         case KeyAction.Return:
           textController.text += '\n';
