@@ -8,4 +8,7 @@ enum KeyAction {
   Space,
   SwithLanguage,
   Confirm,
+  SwithNumeric,
+  SwitchAlphabetic,
+  SwitchSpecial,
 }
