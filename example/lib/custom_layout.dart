@@ -12,6 +12,18 @@ class CustomLayoutKeys extends KeyboardLayoutKeys {
         return defaultEnglishLayout;
     }
   }
+  
+  @override
+  List<List> getLayout(KeyboardLayoutType layout, int index) {
+    switch (layout) {
+      case KeyboardLayoutType.Numeric:
+        return defaultNumericLayout;
+      case KeyboardLayoutType.Special:
+        return [];
+      default:
+        return getLanguage(index);
+    }
+  }
 }
 
 const List<List> _arabicLayout = [
