@@ -70,18 +70,18 @@ class KeyboardDefaultLayoutKeys extends KeyboardLayoutKeys {
 
 const List<List> _defaultEnglishLayout = [
   // Row 1
-  const [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '0',
-  ],
+  // const [
+  //   '1',
+  //   '2',
+  //   '3',
+  //   '4',
+  //   '5',
+  //   '6',
+  //   '7',
+  //   '8',
+  //   '9',
+  //   '0',
+  // ],
   // Row 2
   const [
     'q',
@@ -140,18 +140,18 @@ const List<List> _defaultEnglishLayout = [
 
 const List<List> _defaultArabicLayout = [
   // Row 1
-  const [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '0',
-  ],
+  // const [
+  //   '1',
+  //   '2',
+  //   '3',
+  //   '4',
+  //   '5',
+  //   '6',
+  //   '7',
+  //   '8',
+  //   '9',
+  //   '0',
+  // ],
   // Row 2
   const [
     'ض',
@@ -165,8 +165,8 @@ const List<List> _defaultArabicLayout = [
     'خ',
     'ح',
     'ج',
-    'د',
-    KeyAction.Backspace
+    // 'د',
+    // KeyAction.Backspace
   ],
   // Row 3
   const [
@@ -181,31 +181,29 @@ const List<List> _defaultArabicLayout = [
     'م',
     'ك',
     'ط',
-    KeyAction.Return
   ],
   // Row 4
   const [
     'ذ',
-    'ئ',
     'ء',
     'ؤ',
     'ر',
-    'لا',
     'ى',
     'ة',
     'و',
     'ز',
     'ظ',
-    KeyAction.Shift
+    'د',
+    KeyAction.Backspace
   ],
   // Row 5
   const [
+    KeyAction.SwithNumeric,
+    '،',
     KeyAction.SwithLanguage,
-    '@',
     KeyAction.Space,
-    '-',
     '.',
-    '_',
+    KeyAction.Confirm,
   ]
 ];
 
