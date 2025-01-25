@@ -491,23 +491,27 @@ class _KeyboardState extends State<Keyboard> {
           child: GestureDetector(
               onTap: () {
                 setState(() {
-                  // customLayoutKeys.switchSpecial();
+                  customLayoutKeys.switchSpecial();
                 });
               },
               child: Container(
-                color: Color(0xFFB3B3B3),
                 height: double.infinity,
                 width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Color(0xFFB3B3B3),
+                ),
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   alignment: Alignment.center,
-                  child: Text('=\<',
+                  child: Text('=\\<',
                       style: textStyle.copyWith(
                           fontSize: 20, fontWeight: FontWeight.bold)),
                 ),
               )),
         );
         break;
+
     }
 
     var wdgt = InkWell(

@@ -7,6 +7,7 @@ abstract class KeyboardLayoutKeys {
   List<List> get defaultEnglishLayout => _defaultEnglishLayout;
   List<List> get defaultArabicLayout => _defaultArabicLayout;
   List<List> get defaultNumericLayout => _defaultNumericLayout;
+  List<List> get defaultSpecialLayout => _defaultSpecialLayout;
 
   List<List> get activeLayout => getLayout(layoutType, activeIndex);
   int getLanguagesCount();
@@ -15,6 +16,10 @@ abstract class KeyboardLayoutKeys {
 
   void switchNumeric() {
     layoutType = KeyboardLayoutType.Numeric;
+  }
+
+  void switchSpecial() {
+    layoutType = KeyboardLayoutType.Special;
   }
 
   void switchAlphabetic() {
@@ -27,7 +32,6 @@ abstract class KeyboardLayoutKeys {
     } else {
       activeIndex++;
     }
-    log('activeIndex: $activeIndex');
   }
 }
 
@@ -45,7 +49,7 @@ class KeyboardDefaultLayoutKeys extends KeyboardLayoutKeys {
       case KeyboardLayoutType.Numeric:
         return defaultNumericLayout;
       case KeyboardLayoutType.Special:
-        return [];
+        return defaultSpecialLayout;
       default:
         return getLanguage(index);
     }
@@ -254,6 +258,59 @@ const List<List> _defaultNumericLayout = [
     '12\n34',
     KeyAction.Space,
     '.',
+    KeyAction.Confirm,
+  ]
+];
+
+const List<List> _defaultSpecialLayout = [
+  // Row 1
+    [
+    '~',
+    '\`',
+    '|',
+    '•',
+    '√',
+    'π',
+    '÷',
+    '×',
+    '§',
+    '∆',
+  ],
+
+  // Row 2
+  [
+    '£',
+    '¢',
+    '€',
+    '¥',
+    '^',
+    '°',
+    '=',
+    '{',
+    '}',
+    '\\',
+  ],
+
+  // Row 3
+  [
+    KeyAction.SwithNumeric,
+    '%',
+    '©',
+    '®',
+    '™',
+    '✓',
+    '[',
+    ']',
+    KeyAction.Backspace,
+  ],
+
+  // Row 4
+  [
+    KeyAction.SwitchAlphabetic,
+    '<',
+    '12\n34',
+    KeyAction.Space,
+    '>',
     KeyAction.Confirm,
   ]
 ];
