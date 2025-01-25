@@ -11,4 +11,5 @@ enum KeyAction {
   SwithNumeric,
   SwitchAlphabetic,
   SwitchSpecial,
+  SwitchNumber,
 }

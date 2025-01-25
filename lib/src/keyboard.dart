@@ -512,6 +512,32 @@ class _KeyboardState extends State<Keyboard> {
         );
         break;
 
+      case KeyAction.SwitchNumber:
+      actionKey = Padding(
+          padding: EdgeInsets.symmetric(vertical: 3, horizontal: 1.5),
+          child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  customLayoutKeys.switchNumber();
+                });
+              },
+              child: Container(
+                height: double.infinity,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Color(0xFFB3B3B3),
+                ),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.center,
+                  child: Text('12\n34',
+                      style: textStyle.copyWith(
+                          fontSize: 20, fontWeight: FontWeight.bold, height: 1)),
+                ),
+              )),
+        );
+        break;
     }
 
     var wdgt = InkWell(
