@@ -1,7 +1,7 @@
 part of in_app_keyboard;
 
 abstract class KeyboardLayoutKeys {
-  int activeIndex = 1;
+  int activeIndex = 0;
   KeyboardLayoutType layoutType = KeyboardLayoutType.Alphabetic;
 
   List<List> get defaultEnglishLayout => _defaultEnglishLayout;
