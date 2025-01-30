@@ -4,7 +4,10 @@ class AppKeyboard extends StatefulWidget {
   final List<FocusNode> focusNodes;
   final List<TextEditingController> textControllers;
   final List<KeyboardType> keyboardTypes;
-  final List<KeyboardDefaultLayouts> defaultLayouts;
+
+  /// Define one layout will hide switch language button
+  final List<KeyboardDefaultLayouts>? defaultLayouts;
+  final KeyboardLayoutKeys? customLayoutKeys;
   final Duration showDuration;
   final Color foregroundColor;
   final Color backgroundColor;
@@ -17,10 +20,8 @@ class AppKeyboard extends StatefulWidget {
     required this.focusNodes,
     required this.textControllers,
     required this.keyboardTypes,
-    this.defaultLayouts = const [
-      KeyboardDefaultLayouts.English,
-      KeyboardDefaultLayouts.Arabic,
-    ],
+    this.defaultLayouts,
+    this.customLayoutKeys,
     this.showDuration = const Duration(milliseconds: 250),
     this.foregroundColor = Colors.black,
     this.backgroundColor = const Color(0xFFe3f2fd),
@@ -34,8 +35,6 @@ class AppKeyboard extends StatefulWidget {
 }
 
 class _AppKeyboardState extends State<AppKeyboard> {
-  bool shiftEnabled = false;
-  bool isNumericMode = false;
   bool isShow = false;
   double height = 0;
   bool isMaintainKeyboard = false;
@@ -103,6 +102,7 @@ class _AppKeyboardState extends State<AppKeyboard> {
                   fontSize: widget.fontSize,
                   textColor: widget.foregroundColor,
                   textController: currentTextController,
+                  customLayoutKeys: widget.customLayoutKeys,
                   defaultLayouts: widget.defaultLayouts,
                   type: currentKeyboardType,
                   onKeyPress: _onKeyPress,
