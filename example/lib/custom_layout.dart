@@ -12,7 +12,7 @@ class CustomLayoutKeys extends KeyboardLayoutKeys {
         return defaultEnglishLayout;
     }
   }
-  
+
   @override
   List<List> getLayout(KeyboardLayoutType layout, int index) {
     switch (layout) {
@@ -87,7 +87,7 @@ const List<List> _arabicLayout = [
   ],
   // Row 5
   const [
-    KeyAction.SwithLanguage,
+    KeyAction.SwitchLanguage,
     '@',
     KeyAction.Space,
     '-',
