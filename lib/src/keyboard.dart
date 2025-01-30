@@ -126,6 +126,23 @@ class _KeyboardState extends State<Keyboard> {
           break;
         case KeyAction.Shift:
           break;
+        case KeyAction.Confirm:
+          break;
+        case KeyAction.SwitchNumeric:
+          customLayoutKeys.switchNumeric();
+          break;
+        case KeyAction.SwitchAlphabetic:
+          customLayoutKeys.switchAlphabetic();
+          break;
+        case KeyAction.SwitchLanguage:
+          customLayoutKeys.switchLanguage();
+          break;
+        case KeyAction.SwitchSpecial:
+          customLayoutKeys.switchSpecial();
+          break;
+        case KeyAction.SwitchNumber:
+          customLayoutKeys.switchNumber();
+          break;
         default:
       }
     }
@@ -279,7 +296,8 @@ class _KeyboardState extends State<Keyboard> {
   /// Creates default UI element for keyboard Key.
   Widget _keyboardDefaultKey(KeyboardKey key) {
     return Container(
-        width: MediaQuery.of(context).size.width / customLayoutKeys.activeLayout[0].length,
+        width: MediaQuery.of(context).size.width /
+            customLayoutKeys.activeLayout[0].length,
         child: InkWell(
           onTap: () {
             _onKeyPress(key);
@@ -291,13 +309,15 @@ class _KeyboardState extends State<Keyboard> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 color: Colors.white,
-                boxShadow: widget.shadow ? [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.25),
-                    blurRadius: 4,
-                    offset: const Offset(0, 1),
-                  ),
-                ] : null,
+                boxShadow: widget.shadow
+                    ? [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.25),
+                          blurRadius: 4,
+                          offset: const Offset(0, 1),
+                        ),
+                      ]
+                    : null,
               ),
               child: Center(
                   child: FittedBox(
@@ -322,7 +342,7 @@ class _KeyboardState extends State<Keyboard> {
     Widget? actionKey;
 
     // Switch the action type to build action Key widget.
-    switch (key.action ?? KeyAction.SwithLanguage) {
+    switch (key.action ?? KeyAction.SwitchLanguage) {
       case KeyAction.Backspace:
         actionKey = Padding(
           padding: EdgeInsets.symmetric(vertical: 3, horizontal: 1.5),
@@ -397,26 +417,20 @@ class _KeyboardState extends State<Keyboard> {
           color: textColor,
         );
         break;
-      case KeyAction.SwithLanguage:
-        actionKey = GestureDetector(
-            onTap: () {
-              setState(() {
-                customLayoutKeys.switchLanguage();
-              });
-            },
-            child: Container(
-              height: double.infinity,
-              width: double.infinity,
-              margin: EdgeInsets.symmetric(vertical: 3, horizontal: 1.5),
-              decoration: BoxDecoration(
-                color: Color(0xFFB3B3B3),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(
-                Icons.language,
-                color: textColor,
-              ),
-            ));
+      case KeyAction.SwitchLanguage:
+        actionKey = Container(
+          height: double.infinity,
+          width: double.infinity,
+          margin: EdgeInsets.symmetric(vertical: 3, horizontal: 1.5),
+          decoration: BoxDecoration(
+            color: Color(0xFFB3B3B3),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(
+            Icons.language,
+            color: textColor,
+          ),
+        );
         break;
 
       case KeyAction.Confirm:
@@ -435,107 +449,83 @@ class _KeyboardState extends State<Keyboard> {
         );
         break;
 
-      case KeyAction.SwithNumeric:
-        actionKey = GestureDetector(
-            onTap: () {
-              setState(() {
-                customLayoutKeys.switchNumeric();
-              });
-            },
-            child: Container(
-              height: double.infinity,
-              width: double.infinity,
-              margin: EdgeInsets.symmetric(vertical: 3, horizontal: 1.5),
-              padding: EdgeInsets.all(1.5),
-              decoration: BoxDecoration(
-                color: Color(0xFFB3B3B3),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.center,
-                child: Text('?123',
-                    style: textStyle.copyWith(
-                        fontSize: 20, fontWeight: FontWeight.bold)),
-              ),
-            ));
+      case KeyAction.SwitchNumeric:
+        actionKey = Container(
+          height: double.infinity,
+          width: double.infinity,
+          margin: EdgeInsets.symmetric(vertical: 3, horizontal: 1.5),
+          padding: EdgeInsets.all(1.5),
+          decoration: BoxDecoration(
+            color: Color(0xFFB3B3B3),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.center,
+            child: Text('?123',
+                style: textStyle.copyWith(
+                    fontSize: 20, fontWeight: FontWeight.bold)),
+          ),
+        );
         break;
 
       case KeyAction.SwitchAlphabetic:
         actionKey = Padding(
           padding: EdgeInsets.symmetric(vertical: 3, horizontal: 1.5),
-          child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  customLayoutKeys.switchAlphabetic();
-                });
-              },
-              child: Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Color(0xFFB3B3B3),
-                ),
-                child: Icon(
-                  Icons.abc,
-                  color: textColor,
-                ),
-              )),
+          child: Container(
+            height: double.infinity,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Color(0xFFB3B3B3),
+            ),
+            child: Icon(
+              Icons.abc,
+              color: textColor,
+            ),
+          ),
         );
         break;
 
       case KeyAction.SwitchSpecial:
         actionKey = Padding(
           padding: EdgeInsets.symmetric(vertical: 3, horizontal: 1.5),
-          child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  customLayoutKeys.switchSpecial();
-                });
-              },
-              child: Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Color(0xFFB3B3B3),
-                ),
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.center,
-                  child: Text('=\\<',
-                      style: textStyle.copyWith(
-                          fontSize: 20, fontWeight: FontWeight.bold)),
-                ),
-              )),
+          child: Container(
+            height: double.infinity,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Color(0xFFB3B3B3),
+            ),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.center,
+              child: Text('=\\<',
+                  style: textStyle.copyWith(
+                      fontSize: 20, fontWeight: FontWeight.bold)),
+            ),
+          ),
         );
         break;
 
       case KeyAction.SwitchNumber:
-      actionKey = Padding(
+        actionKey = Padding(
           padding: EdgeInsets.symmetric(vertical: 3, horizontal: 1.5),
-          child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  customLayoutKeys.switchNumber();
-                });
-              },
-              child: Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Color(0xFFB3B3B3),
-                ),
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.center,
-                  child: Text('12\n34',
-                      style: textStyle.copyWith(
-                          fontSize: 20, fontWeight: FontWeight.bold, height: 1)),
-                ),
-              )),
+          child: Container(
+            height: double.infinity,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Color(0xFFB3B3B3),
+            ),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.center,
+              child: Text('12\n34',
+                  style: textStyle.copyWith(
+                      fontSize: 20, fontWeight: FontWeight.bold, height: 1)),
+            ),
+          ),
         );
         break;
     }

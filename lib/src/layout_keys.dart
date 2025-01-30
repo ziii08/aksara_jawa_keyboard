@@ -47,7 +47,6 @@ class KeyboardDefaultLayoutKeys extends KeyboardLayoutKeys {
   @override
   int getLanguagesCount() => defaultLayouts.length;
 
-
   @override
   List<List> getLayout(KeyboardLayoutType layout, int index) {
     switch (layout) {
@@ -56,7 +55,7 @@ class KeyboardDefaultLayoutKeys extends KeyboardLayoutKeys {
       case KeyboardLayoutType.Special:
         return defaultSpecialLayout;
       case KeyboardLayoutType.Number:
-      return _defaultNumberLayout;
+        return _defaultNumberLayout;
       default:
         return getLanguage(index);
     }
@@ -133,9 +132,9 @@ const List<List> _defaultEnglishLayout = [
   ],
   // Row 5
   const [
-    KeyAction.SwithNumeric,
+    KeyAction.SwitchNumeric,
     '/',
-    KeyAction.SwithLanguage,
+    KeyAction.SwitchLanguage,
     KeyAction.Space,
     // '&',
     // '_',
@@ -190,24 +189,12 @@ const List<List> _defaultArabicLayout = [
     'ط',
   ],
   // Row 4
-  const [
-    'ذ',
-    'ء',
-    'ؤ',
-    'ر',
-    'ى',
-    'ة',
-    'و',
-    'ز',
-    'ظ',
-    'د',
-    KeyAction.Backspace
-  ],
+  const ['ذ', 'ء', 'ؤ', 'ر', 'ى', 'ة', 'و', 'ز', 'ظ', 'د', KeyAction.Backspace],
   // Row 5
   const [
-    KeyAction.SwithNumeric,
+    KeyAction.SwitchNumeric,
     '،',
-    KeyAction.SwithLanguage,
+    KeyAction.SwitchLanguage,
     KeyAction.Space,
     '.',
     KeyAction.Confirm,
@@ -269,7 +256,7 @@ const List<List> _defaultNumericLayout = [
 
 const List<List> _defaultSpecialLayout = [
   // Row 1
-    [
+  [
     '~',
     '\`',
     '|',
@@ -298,7 +285,7 @@ const List<List> _defaultSpecialLayout = [
 
   // Row 3
   [
-    KeyAction.SwithNumeric,
+    KeyAction.SwitchNumeric,
     '%',
     '©',
     '®',
@@ -351,7 +338,7 @@ const List<List> _defaultNumberLayout = [
   // Row 4
   [
     KeyAction.SwitchAlphabetic,
-    KeyAction.SwithNumeric,
+    KeyAction.SwitchNumeric,
     '0',
     '=',
     KeyAction.Confirm,
