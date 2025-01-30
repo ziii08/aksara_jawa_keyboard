@@ -323,7 +323,7 @@ const List<List> _defaultNumberLayout = [
     '4',
     '5',
     '6',
-    ' ',
+    KeyAction.Space,
   ],
 
   // Row 3

@@ -260,6 +260,11 @@ class _KeyboardState extends State<Keyboard> {
               break;
             case KeyboardKeyType.Action:
               // Draw action key.
+              if ((widget.defaultLayouts == null ||
+                      widget.defaultLayouts!.length == 1) &&
+                  keyboardKey.action == KeyAction.SwitchLanguage) {
+                return SizedBox();
+              }
               keyWidget = _keyboardDefaultActionKey(keyboardKey);
               break;
           }
@@ -328,7 +333,8 @@ class _KeyboardState extends State<Keyboard> {
                       ? key.capsText ?? ''
                       : (isShiftEnabled ? key.capsText : key.text) ?? '',
                   style: textStyle.copyWith(
-                      fontSize: 20, fontWeight: FontWeight.bold),
+                    fontSize: 20,
+                  ),
                 ),
               )),
             ),
@@ -409,6 +415,10 @@ class _KeyboardState extends State<Keyboard> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
           ),
+          child: Icon(
+            Icons.space_bar,
+            color: textColor,
+          ),
         );
         break;
       case KeyAction.Return:
@@ -464,7 +474,9 @@ class _KeyboardState extends State<Keyboard> {
             alignment: Alignment.center,
             child: Text('?123',
                 style: textStyle.copyWith(
-                    fontSize: 20, fontWeight: FontWeight.bold)),
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                )),
           ),
         );
         break;
@@ -481,6 +493,7 @@ class _KeyboardState extends State<Keyboard> {
             ),
             child: Icon(
               Icons.abc,
+              size: 40,
               color: textColor,
             ),
           ),
@@ -502,7 +515,9 @@ class _KeyboardState extends State<Keyboard> {
               alignment: Alignment.center,
               child: Text('=\\<',
                   style: textStyle.copyWith(
-                      fontSize: 20, fontWeight: FontWeight.bold)),
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  )),
             ),
           ),
         );
@@ -523,7 +538,10 @@ class _KeyboardState extends State<Keyboard> {
               alignment: Alignment.center,
               child: Text('12\n34',
                   style: textStyle.copyWith(
-                      fontSize: 20, fontWeight: FontWeight.bold, height: 1)),
+                    fontSize: 14,
+                    height: 1.2,
+                    fontWeight: FontWeight.bold,
+                  )),
             ),
           ),
         );
