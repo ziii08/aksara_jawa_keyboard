@@ -228,13 +228,13 @@ class _KeyboardState extends State<Keyboard> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: _rows(),
+        children: _rows(isExpanded: true),
       ),
     );
   }
 
   /// Returns the rows for keyboard.
-  List<Widget> _rows() {
+  List<Widget> _rows({bool isExpanded = false}) {
     // Get the keyboard Rows
     List<List<KeyboardKey>> keyboardRows = type == KeyboardType.Numeric
         ? _getKeyboardRowsNumeric()
@@ -256,7 +256,8 @@ class _KeyboardState extends State<Keyboard> {
           switch (keyboardKey.keyType) {
             case KeyboardKeyType.String:
               // Draw String key.
-              keyWidget = _keyboardDefaultKey(keyboardKey);
+              keyWidget =
+                  _keyboardDefaultKey(keyboardKey, isExpanded: isExpanded);
               break;
             case KeyboardKeyType.Action:
               // Draw action key.
@@ -299,10 +300,10 @@ class _KeyboardState extends State<Keyboard> {
   bool longPress = false;
 
   /// Creates default UI element for keyboard Key.
-  Widget _keyboardDefaultKey(KeyboardKey key) {
-    return Container(
-        width: MediaQuery.of(context).size.width /
-            customLayoutKeys.activeLayout[0].length,
+  Widget _keyboardDefaultKey(KeyboardKey key, {bool isExpanded = false}) {
+    final screenWidth = width ?? MediaQuery.of(context).size.width;
+    final keyWidget = Container(
+        width: screenWidth / customLayoutKeys.activeLayout[0].length,
         child: InkWell(
           onTap: () {
             _onKeyPress(key);
@@ -340,6 +341,9 @@ class _KeyboardState extends State<Keyboard> {
             ),
           ),
         ));
+
+    if (isExpanded) return Expanded(child: keyWidget);
+    return keyWidget;
   }
 
   /// Creates default UI element for keyboard Action Key.
