@@ -21,6 +21,7 @@ publish_to: 'none'
 dependencies:
   flutter:
     sdk: flutter
+  scaled_app: ^2.3.0
 
   in_app_keyboard:
     path: ../

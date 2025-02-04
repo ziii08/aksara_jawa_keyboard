@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:in_app_keyboard/in_app_keyboard.dart';
+import 'package:scaled_app/scaled_app.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  ScaledWidgetsFlutterBinding.ensureInitialized(
+    scaleFactor: (deviceSize) {
+      const double widthOfDesign = 400;
+      return deviceSize.width / widthOfDesign;
+    },
+  );
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -80,7 +89,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text('Tap on the text fields to show the keyboard'),
             AppKeyboard(
-              width: MediaQuery.of(context).size.width,
+              // pass design width to the keyboard if using ScaledWidgets from scaled_app package
+              width: 400,
               focusNodes: [_focusNodeText1, _focusNodeText2],
               textControllers: [_controllerText1, _controllerText2],
               keyboardTypes: [_keyboardTypeText1, _keyboardTypeText2],
