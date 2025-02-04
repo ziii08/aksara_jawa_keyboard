@@ -80,6 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text('Tap on the text fields to show the keyboard'),
             AppKeyboard(
+              width: MediaQuery.of(context).size.width,
               focusNodes: [_focusNodeText1, _focusNodeText2],
               textControllers: [_controllerText1, _controllerText2],
               keyboardTypes: [_keyboardTypeText1, _keyboardTypeText2],

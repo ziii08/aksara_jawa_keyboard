@@ -13,6 +13,7 @@ class AppKeyboard extends StatefulWidget {
   final Color backgroundColor;
   final double fontSize;
   final double height;
+  final double? width;
   final void Function(bool isShow) onShow;
 
   AppKeyboard({
@@ -27,6 +28,7 @@ class AppKeyboard extends StatefulWidget {
     this.backgroundColor = const Color(0xFFe3f2fd),
     this.fontSize = 20,
     this.height = 250,
+    this.width,
     required this.onShow,
   });
 
@@ -99,6 +101,7 @@ class _AppKeyboardState extends State<AppKeyboard> {
               ? null
               : Keyboard(
                   height: widget.height,
+                  width: widget.width,
                   fontSize: widget.fontSize,
                   textColor: widget.foregroundColor,
                   textController: currentTextController,
