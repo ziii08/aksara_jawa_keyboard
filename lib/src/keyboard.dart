@@ -300,46 +300,48 @@ class _KeyboardState extends State<Keyboard> {
 
   /// Creates default UI element for keyboard Key.
   Widget _keyboardDefaultKey(KeyboardKey key) {
-    return Container(
-        width: MediaQuery.of(context).size.width /
-            customLayoutKeys.activeLayout[0].length,
-        child: InkWell(
-          onTap: () {
-            _onKeyPress(key);
-          },
-          child: Container(
-            height: height / customLayoutKeys.activeLayout.length,
-            padding: EdgeInsets.symmetric(vertical: 3, horizontal: 1.5),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Colors.white,
-                boxShadow: widget.shadow
-                    ? [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.25),
-                          blurRadius: 4,
-                          offset: const Offset(0, 1),
-                        ),
-                      ]
-                    : null,
-              ),
-              child: Center(
-                  child: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.center,
-                child: Text(
-                  alwaysCaps
-                      ? key.capsText ?? ''
-                      : (isShiftEnabled ? key.capsText : key.text) ?? '',
-                  style: textStyle.copyWith(
-                    fontSize: 20,
-                  ),
-                ),
-              )),
-            ),
+    return
+        // Container(
+        //     width: MediaQuery.of(context).size.width /
+        //         customLayoutKeys.activeLayout[0].length,
+        Expanded(
+            child: InkWell(
+      onTap: () {
+        _onKeyPress(key);
+      },
+      child: Container(
+        height: height / customLayoutKeys.activeLayout.length,
+        padding: EdgeInsets.symmetric(vertical: 3, horizontal: 1.5),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: Colors.white,
+            boxShadow: widget.shadow
+                ? [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.25),
+                      blurRadius: 4,
+                      offset: const Offset(0, 1),
+                    ),
+                  ]
+                : null,
           ),
-        ));
+          child: Center(
+              child: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.center,
+            child: Text(
+              alwaysCaps
+                  ? key.capsText ?? ''
+                  : (isShiftEnabled ? key.capsText : key.text) ?? '',
+              style: textStyle.copyWith(
+                fontSize: 20,
+              ),
+            ),
+          )),
+        ),
+      ),
+    ));
   }
 
   /// Creates default UI element for keyboard Action Key.
