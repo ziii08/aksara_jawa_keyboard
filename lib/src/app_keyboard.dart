@@ -81,9 +81,16 @@ class _AppKeyboardState extends State<AppKeyboard> {
     if (currentFocus.hasFocus) {
       currentFocus.unfocus();
     }
-    isShow = false;
-    widget.onShow(isShow);
-    height = 0;
+    // Add a small delay to ensure the unfocus takes effect before hiding keyboard
+    Future.delayed(const Duration(milliseconds: 50), () {
+      if (mounted) {
+        setState(() {
+          isShow = false;
+          height = 0;
+        });
+        widget.onShow(isShow);
+      }
+    });
   }
 
   @override
@@ -116,9 +123,15 @@ class _AppKeyboardState extends State<AppKeyboard> {
   }
 
   _onKeyPress(KeyboardKey key) {
-    currentFocus.requestFocus();
-    if (key.keyType != KeyboardKeyType.Action) return;
-    if (key.action != KeyAction.Confirm) return;
+    if (key.keyType != KeyboardKeyType.Action) {
+      currentFocus.requestFocus();
+      return;
+    }
+    if (key.action != KeyAction.Confirm) {
+      currentFocus.requestFocus();
+      return;
+    }
+    // Don't request focus when confirming, just close the keyboard
     closeKeyboard();
   }
 }
