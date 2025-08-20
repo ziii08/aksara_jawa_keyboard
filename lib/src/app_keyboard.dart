@@ -60,7 +60,6 @@ class _AppKeyboardState extends State<AppKeyboard> {
               widget.textControllers[widget.focusNodes.indexOf(e)];
           currentKeyboardType =
               widget.keyboardTypes[widget.focusNodes.indexOf(e)];
-          setState(() {});
         } else {
           await Future.delayed(Duration(milliseconds: 100));
           if (currentFocus.hasFocus || isMaintainKeyboard) return;
@@ -79,11 +78,12 @@ class _AppKeyboardState extends State<AppKeyboard> {
   }
 
   void closeKeyboard() {
-    FocusScope.of(context).unfocus();
+    if (currentFocus.hasFocus) {
+      currentFocus.unfocus();
+    }
     isShow = false;
     widget.onShow(isShow);
     height = 0;
-    setState(() {});
   }
 
   @override
