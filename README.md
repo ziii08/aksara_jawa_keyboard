@@ -13,3 +13,56 @@ We want to support industrial flutter developers that uses flutter linux product
 - Customizable keys.
 - Auto show keyboard on text form click.
 - Auto hide keyboard on text form unfocus.
+- **Advanced Shift Support**: Temporary shift and caps lock functionality
+  - None: Normal lowercase typing
+  - Temporary: Next character will be uppercase, then automatically returns to lowercase
+  - Caps Lock: All characters will be uppercase until manually disabled
+
+## Shift Feature
+
+The keyboard now supports three shift states that cycle when the shift key is pressed:
+
+1. **None** (Default): All characters are lowercase
+2. **Temporary Shift**: Next character will be uppercase, then automatically returns to lowercase
+3. **Caps Lock**: All characters remain uppercase until shift is pressed again
+
+### Visual Indicators:
+- **None**: Standard arrow up icon (↑)
+- **Temporary**: Filled arrow up icon (↑) in blue color
+- **Caps Lock**: Caps lock icon (⇪) in green color
+
+### Usage Example:
+
+```dart
+AppKeyboard(
+  focusNodes: [focusNode],
+  textControllers: [textController],
+  keyboardTypes: [KeyboardType.Alphanumeric],
+  onShow: (isShow) {
+    print('Keyboard is ${isShow ? 'visible' : 'hidden'}');
+  },
+  onShiftStateChanged: (shiftState) {
+    print('Shift state changed to: ${shiftState}');
+    // Handle shift state changes
+    // shiftState can be: ShiftState.None, ShiftState.Temporary, or ShiftState.CapsLock
+  },
+)
+```
+
+### Shift State Management:
+
+You can also programmatically control the shift state:
+
+```dart
+// Get the keyboard widget reference
+final keyboardKey = GlobalKey<KeyboardState>();
+
+// Set shift state programmatically
+keyboardKey.currentState?.setShiftState(ShiftState.CapsLock);
+
+// Check current shift state
+ShiftState currentState = keyboardKey.currentState?.currentShiftState ?? ShiftState.None;
+
+// Check if shift is active
+bool isActive = keyboardKey.currentState?.isShiftActive ?? false;
+```

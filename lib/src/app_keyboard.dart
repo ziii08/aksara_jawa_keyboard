@@ -15,6 +15,7 @@ class AppKeyboard extends StatefulWidget {
   final double height;
   final double? width;
   final void Function(bool isShow) onShow;
+  final void Function(ShiftState)? onShiftStateChanged;
 
   AppKeyboard({
     Key? key,
@@ -30,6 +31,7 @@ class AppKeyboard extends StatefulWidget {
     this.height = 250,
     this.width,
     required this.onShow,
+    this.onShiftStateChanged,
   });
 
   @override
@@ -116,6 +118,7 @@ class _AppKeyboardState extends State<AppKeyboard> {
                   defaultLayouts: widget.defaultLayouts,
                   type: currentKeyboardType,
                   onKeyPress: _onKeyPress,
+                  onShiftStateChanged: widget.onShiftStateChanged,
                 ),
         ),
       ),

@@ -14,6 +14,9 @@ class Keyboard extends StatefulWidget {
   /// Callback for Key press event. Called with pressed `Key` object.
   final Function? onKeyPress;
 
+  /// Callback for shift state changes. Called with new ShiftState.
+  final Function(ShiftState)? onShiftStateChanged;
+
   /// Virtual keyboard height. Default is 300
   final double height;
 
@@ -51,6 +54,7 @@ class Keyboard extends StatefulWidget {
       {Key? key,
       required this.type,
       this.onKeyPress,
+      this.onShiftStateChanged,
       this.builder,
       this.width,
       this.defaultLayouts,
@@ -87,8 +91,24 @@ class _KeyboardState extends State<Keyboard> {
   // Text Style for keys.
   late TextStyle textStyle;
 
-  // True if shift is enabled.
-  bool isShiftEnabled = false;
+  // Shift state management
+  ShiftState shiftState = ShiftState.None;
+
+  /// Sets the shift state programmatically
+  void setShiftState(ShiftState newState) {
+    if (mounted && shiftState != newState) {
+      setState(() {
+        shiftState = newState;
+      });
+      widget.onShiftStateChanged?.call(newState);
+    }
+  }
+
+  /// Gets the current shift state
+  ShiftState get currentShiftState => shiftState;
+
+  /// Checks if shift is currently active (temporary or caps lock)
+  bool get isShiftActive => shiftState != ShiftState.None;
 
   void _onKeyPress(KeyboardKey key) {
     var cursorPos = textController.selection.base.offset;
@@ -98,9 +118,20 @@ class _KeyboardState extends State<Keyboard> {
     }
 
     if (key.keyType == KeyboardKeyType.String) {
+      // Use caps text if shift is active (temporary or caps lock)
+      bool useCapitalLetter = shiftState != ShiftState.None;
       textController.text = textController.text.substring(0, cursorPos) +
-          ((isShiftEnabled ? key.capsText : key.text) ?? '') +
+          ((useCapitalLetter ? key.capsText : key.text) ?? '') +
           textController.text.substring(cursorPos);
+
+      // If temporary shift is active, disable it after typing one character
+      if (shiftState == ShiftState.Temporary) {
+        setState(() {
+          shiftState = ShiftState.None;
+        });
+        widget.onShiftStateChanged?.call(shiftState);
+      }
+
       // set cursor position
       textController.selection =
           TextSelection.fromPosition(TextPosition(offset: cursorPos + 1));
@@ -332,7 +363,10 @@ class _KeyboardState extends State<Keyboard> {
                 child: Text(
                   alwaysCaps
                       ? key.capsText ?? ''
-                      : (isShiftEnabled ? key.capsText : key.text) ?? '',
+                      : (shiftState != ShiftState.None
+                              ? key.capsText
+                              : key.text) ??
+                          '',
                   style: textStyle.copyWith(
                     fontSize: 20,
                   ),
@@ -390,6 +424,22 @@ class _KeyboardState extends State<Keyboard> {
         );
         break;
       case KeyAction.Shift:
+        // Determine shift icon based on current state
+        IconData shiftIcon;
+        Color shiftColor = textColor;
+
+        switch (shiftState) {
+          case ShiftState.None:
+            shiftIcon = Icons.keyboard_arrow_up;
+            break;
+          case ShiftState.Temporary:
+            shiftIcon = Icons.keyboard_double_arrow_up;
+            break;
+          case ShiftState.CapsLock:
+            shiftIcon = Icons.keyboard_capslock_outlined;
+            break;
+        }
+
         actionKey = Container(
           width: double.infinity,
           height: double.infinity,
@@ -398,14 +448,31 @@ class _KeyboardState extends State<Keyboard> {
             borderRadius: BorderRadius.circular(5),
           ),
           margin: EdgeInsets.symmetric(vertical: 3, horizontal: 1.5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Stack(
             children: [
-              Icon(
-                isShiftEnabled ? Icons.arrow_upward : Icons.keyboard_arrow_up,
-                color: textColor,
-                size: 18,
+              // Main shift icon centered
+              Center(
+                child: Icon(
+                  shiftIcon,
+                  color: shiftColor,
+                ),
               ),
+              // Small indicator dot for active states
+              if (shiftState != ShiftState.None)
+                Positioned(
+                  top: 5,
+                  right: 5,
+                  child: Container(
+                    width: 7,
+                    height: 7,
+                    decoration: BoxDecoration(
+                      color: shiftState == ShiftState.Temporary
+                          ? Colors.blue
+                          : Colors.green,
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                  ),
+                ),
             ],
           ),
         );
@@ -557,8 +624,20 @@ class _KeyboardState extends State<Keyboard> {
         if (key.action == KeyAction.Shift) {
           if (!alwaysCaps) {
             setState(() {
-              isShiftEnabled = !isShiftEnabled;
+              // Cycle through shift states: None -> Temporary -> CapsLock -> None
+              switch (shiftState) {
+                case ShiftState.None:
+                  shiftState = ShiftState.Temporary;
+                  break;
+                case ShiftState.Temporary:
+                  shiftState = ShiftState.CapsLock;
+                  break;
+                case ShiftState.CapsLock:
+                  shiftState = ShiftState.None;
+                  break;
+              }
             });
+            widget.onShiftStateChanged?.call(shiftState);
           }
         }
 

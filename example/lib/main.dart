@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
         '/numeric': (context) => NumericKeyboardPage(),
         '/alphanumeric': (context) => AlphanumericKeyboardPage(),
         '/mixed_layout': (context) => MixedLayoutPage(),
+        '/shift_demo': (context) => ShiftDemoPage(),
       },
     );
   }
@@ -81,6 +82,15 @@ class HomePage extends StatelessWidget {
               Icons.language,
               Colors.purple,
               '/mixed_layout',
+            ),
+            SizedBox(height: 20),
+            _buildNavigationCard(
+              context,
+              'Shift Demo',
+              'Trial fitur temporary shift dan caps lock',
+              Icons.keyboard_capslock,
+              Colors.teal,
+              '/shift_demo',
             ),
           ],
         ),
@@ -827,6 +837,379 @@ class _MixedLayoutPageState extends State<MixedLayoutPage> {
               print(
                   'Mixed Layout Keyboard is ${isShow ? 'visible' : 'hidden'}');
             },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Page 4: Shift Demo
+class ShiftDemoPage extends StatefulWidget {
+  @override
+  _ShiftDemoPageState createState() => _ShiftDemoPageState();
+}
+
+class _ShiftDemoPageState extends State<ShiftDemoPage> {
+  final _textController = TextEditingController();
+  final _textFocusNode = FocusNode();
+  final _sentenceController = TextEditingController();
+  final _sentenceFocusNode = FocusNode();
+
+  String _currentShiftState = 'None';
+  String _shiftStateDescription = 'Huruf kecil (lowercase)';
+
+  String _getShiftStateDescription(String state) {
+    switch (state) {
+      case 'None':
+        return 'Huruf kecil (lowercase)';
+      case 'Temporary':
+        return 'Shift sementara - huruf besar untuk 1 karakter berikutnya';
+      case 'CapsLock':
+        return 'Caps lock aktif - semua huruf besar';
+      default:
+        return 'Unknown state';
+    }
+  }
+
+  void _onShiftStateChanged(ShiftState newState) {
+    setState(() {
+      _currentShiftState = newState.toString().split('.').last;
+      _shiftStateDescription = _getShiftStateDescription(_currentShiftState);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Shift Demo'),
+        backgroundColor: Colors.teal.withOpacity(0.1),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Demo Fitur Shift',
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.teal[700],
+                        ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    'Demo fitur shift keyboard: None → Temporary → Caps Lock → None (siklus)',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Colors.grey[600],
+                        ),
+                  ),
+                  SizedBox(height: 20),
+
+                  // Status Shift
+                  Card(
+                    color: Colors.teal.withOpacity(0.1),
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.keyboard_capslock,
+                                  color: Colors.teal[700]),
+                              SizedBox(width: 8),
+                              Text(
+                                'Status Shift Saat Ini:',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.teal[700],
+                                    ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            _currentShiftState,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: _currentShiftState == 'None'
+                                      ? Colors.grey[600]
+                                      : _currentShiftState == 'Temporary'
+                                          ? Colors.blue[700]
+                                          : Colors.green[700],
+                                ),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            _shiftStateDescription,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: Colors.grey[600],
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: 20),
+
+                  Text(
+                    'Cara Menggunakan:',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  SizedBox(height: 8),
+                  Card(
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: Text('1',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold)),
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Expanded(
+                                  child: Text(
+                                      'Tap shift sekali → Temporary shift (huruf besar untuk 1 karakter)')),
+                            ],
+                          ),
+                          SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Container(
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  color: Colors.blue[300],
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: Text('2',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white)),
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Expanded(
+                                  child: Text(
+                                      'Tap shift kedua → Caps lock (semua huruf besar)')),
+                            ],
+                          ),
+                          SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Container(
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  color: Colors.green[300],
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: Text('3',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white)),
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Expanded(
+                                  child: Text(
+                                      'Tap shift ketiga → Kembali ke huruf kecil')),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(height: 20),
+
+                  TextFormField(
+                    focusNode: _textFocusNode,
+                    controller: _textController,
+                    keyboardType: TextInputType.none,
+                    decoration: InputDecoration(
+                        labelText: 'Trial Shift Disini',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.edit),
+                        helperText: 'Coba tekan shift dan ketik huruf'),
+                  ),
+                  SizedBox(height: 16),
+                  TextFormField(
+                    focusNode: _sentenceFocusNode,
+                    controller: _sentenceController,
+                    keyboardType: TextInputType.none,
+                    maxLines: 3,
+                    decoration: InputDecoration(
+                        labelText: 'Tulis Kalimat',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.text_fields),
+                        helperText:
+                            'Coba tulis kalimat dengan caps dan lowercase'),
+                  ),
+
+                  SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            FocusScope.of(context).unfocus();
+                          },
+                          child: Text('Sembunyikan Keyboard'),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () {
+                            _textController.clear();
+                            _sentenceController.clear();
+                          },
+                          child: Text('Clear All'),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 20),
+                  Card(
+                    color: Colors.blue.withOpacity(0.1),
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.navigation, color: Colors.blue[700]),
+                              SizedBox(width: 8),
+                              Text(
+                                'Navigasi ke Halaman Lain:',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue[700],
+                                    ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 12),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton.icon(
+                                  onPressed: () {
+                                    Navigator.pushReplacementNamed(
+                                        context, '/alphanumeric');
+                                  },
+                                  icon: Icon(Icons.keyboard_alt, size: 16),
+                                  label: Text('Alphanumeric',
+                                      style: TextStyle(fontSize: 12)),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.orange,
+                                    foregroundColor: Colors.white,
+                                    padding: EdgeInsets.symmetric(vertical: 8),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Expanded(
+                                child: ElevatedButton.icon(
+                                  onPressed: () {
+                                    Navigator.pushReplacementNamed(
+                                        context, '/mixed_layout');
+                                  },
+                                  icon: Icon(Icons.language, size: 16),
+                                  label: Text('Mixed Layout',
+                                      style: TextStyle(fontSize: 12)),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.purple,
+                                    foregroundColor: Colors.white,
+                                    padding: EdgeInsets.symmetric(vertical: 8),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 8),
+                          SizedBox(
+                            width: double.infinity,
+                            child: OutlinedButton.icon(
+                              onPressed: () {
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  '/',
+                                  (route) => false,
+                                );
+                              },
+                              icon: Icon(Icons.home, size: 16),
+                              label: Text('Kembali ke Home'),
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: Colors.blue[700],
+                                side: BorderSide(color: Colors.blue[300]!),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          AppKeyboard(
+            width: 400,
+            focusNodes: [_textFocusNode, _sentenceFocusNode],
+            textControllers: [_textController, _sentenceController],
+            keyboardTypes: [
+              KeyboardType.Alphanumeric,
+              KeyboardType.Alphanumeric,
+            ],
+            defaultLayouts: [
+              KeyboardDefaultLayouts.English,
+              KeyboardDefaultLayouts.English,
+            ],
+            onShow: (isShow) {
+              print('Shift Demo Keyboard is ${isShow ? 'visible' : 'hidden'}');
+            },
+            onShiftStateChanged: _onShiftStateChanged,
           ),
         ],
       ),
