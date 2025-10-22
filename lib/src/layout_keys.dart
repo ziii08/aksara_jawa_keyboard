@@ -1,346 +1,213 @@
-part of in_app_keyboard;
+part of aksara_jawa_keyboard;
 
 abstract class KeyboardLayoutKeys {
   int activeIndex = 0;
-  KeyboardLayoutType layoutType = KeyboardLayoutType.Alphabetic;
+  KeyboardLayoutType layoutType = KeyboardLayoutType.Main;
 
-  List<List> get defaultEnglishLayout => _defaultEnglishLayout;
-  List<List> get defaultArabicLayout => _defaultArabicLayout;
-  List<List> get defaultNumericLayout => _defaultNumericLayout;
-  List<List> get defaultSpecialLayout => _defaultSpecialLayout;
-  List<List> get defaultNumberLayout => _defaultNumberLayout;
+  List<List> get mainKeyboardLayout => _mainKeyboardLayout;
+  List<List> get shiftKeyboardLayout => _shiftKeyboardLayout;
+  List<List> get numberKeyboardLayout => _numberKeyboardLayout;
 
   List<List> get activeLayout => getLayout(layoutType, activeIndex);
-  int getLanguagesCount();
-  List<List> getLanguage(int index);
   List<List> getLayout(KeyboardLayoutType layout, int index);
 
-  void switchNumeric() {
-    layoutType = KeyboardLayoutType.Numeric;
-  }
-
-  void switchSpecial() {
-    layoutType = KeyboardLayoutType.Special;
+  void switchMain() {
+    layoutType = KeyboardLayoutType.Main;
   }
 
   void switchNumber() {
     layoutType = KeyboardLayoutType.Number;
   }
 
-  void switchAlphabetic() {
-    layoutType = KeyboardLayoutType.Alphabetic;
-  }
-
-  void switchLanguage() {
-    if ((activeIndex + 1) == getLanguagesCount()) {
-      activeIndex = 0;
-    } else {
-      activeIndex++;
-    }
+  void switchShift() {
+    layoutType = KeyboardLayoutType.Shift;
   }
 }
 
-class KeyboardDefaultLayoutKeys extends KeyboardLayoutKeys {
-  List<KeyboardDefaultLayouts> defaultLayouts;
-  KeyboardDefaultLayoutKeys(this.defaultLayouts);
-
-  @override
-  int getLanguagesCount() => defaultLayouts.length;
-
+class AksaraJawaKeyboard extends KeyboardLayoutKeys {
   @override
   List<List> getLayout(KeyboardLayoutType layout, int index) {
     switch (layout) {
-      case KeyboardLayoutType.Numeric:
-        return defaultNumericLayout;
-      case KeyboardLayoutType.Special:
-        return defaultSpecialLayout;
+      case KeyboardLayoutType.Main:
+        return _mainKeyboardLayout;
+      case KeyboardLayoutType.Shift:
+        return _shiftKeyboardLayout;
       case KeyboardLayoutType.Number:
-        return _defaultNumberLayout;
-      default:
-        return getLanguage(index);
+        return _numberKeyboardLayout;
     }
-  }
-
-  @override
-  List<List> getLanguage(int index) {
-    switch (defaultLayouts[index]) {
-      case KeyboardDefaultLayouts.English:
-        return _defaultEnglishLayout;
-      case KeyboardDefaultLayouts.Arabic:
-        return _defaultArabicLayout;
-      default:
-    }
-    return _defaultEnglishLayout;
   }
 }
 
-const List<List> _defaultEnglishLayout = [
-  // Row 1
-  // const [
-  //   '1',
-  //   '2',
-  //   '3',
-  //   '4',
-  //   '5',
-  //   '6',
-  //   '7',
-  //   '8',
-  //   '9',
-  //   '0',
-  // ],
-  // Row 2
+const List<List> _mainKeyboardLayout = [
   const [
-    'q',
-    'w',
-    'e',
-    'r',
-    't',
-    'y',
-    'u',
-    'i',
-    'o',
-    'p',
+    "꦳",
+    "ꦀ",
+    "ꦁ",
+    "ꦂ",
+    "ꦃ",
+    "ꦿ",
+    "ꦽ",
+    "ꦁ",
+    "꧇",
+    "꧇",
   ],
-  // Row 3
   const [
-    'a',
-    's',
-    'd',
-    'f',
-    'g',
-    'h',
-    'j',
-    'k',
-    'l',
-    // ';',
-    // '\'',
+    "ꦼ",
+    "ꦮ",
+    "ꦺ",
+    "ꦫ",
+    "ꦠ",
+    "ꦪ",
+    "ꦸ",
+    "ꦶ",
+    "ꦺꦴ",
+    "ꦥ",
   ],
-  // Row 4
   const [
-    KeyAction.Shift,
-    'z',
-    'x',
-    'c',
-    'v',
-    'b',
-    'n',
-    'm',
-    KeyAction.Backspace
-    // ',',
-    // '.',
-    // '/',
+    "꧀",
+    "ꦱ",
+    "ꦢ",
+    "ꦉ",
+    "ꦒ",
+    "ꦲ",
+    "ꦗ",
+    "ꦏ",
+    "ꦭ",
+    "ꦝ",
   ],
-  // Row 5
   const [
-    KeyAction.SwitchNumeric,
-    '/',
-    KeyAction.SwitchLanguage,
-    KeyAction.Space,
-    // '&',
-    // '_',
-    // '-',
-    '.',
-    KeyAction.Confirm,
-  ]
-];
-
-const List<List> _defaultArabicLayout = [
-  // Row 1
-  // const [
-  //   '1',
-  //   '2',
-  //   '3',
-  //   '4',
-  //   '5',
-  //   '6',
-  //   '7',
-  //   '8',
-  //   '9',
-  //   '0',
-  // ],
-  // Row 2
-  const [
-    'ض',
-    'ص',
-    'ث',
-    'ق',
-    'ف',
-    'غ',
-    'ع',
-    'ه',
-    'خ',
-    'ح',
-    'ج',
-    // 'د',
-    // KeyAction.Backspace
-  ],
-  // Row 3
-  const [
-    'ش',
-    'س',
-    'ي',
-    'ب',
-    'ل',
-    'ا',
-    'ت',
-    'ن',
-    'م',
-    'ك',
-    'ط',
-  ],
-  // Row 4
-  const ['ذ', 'ء', 'ؤ', 'ر', 'ى', 'ة', 'و', 'ز', 'ظ', 'د', KeyAction.Backspace],
-  // Row 5
-  const [
-    KeyAction.SwitchNumeric,
-    '،',
-    KeyAction.SwitchLanguage,
-    KeyAction.Space,
-    '.',
-    KeyAction.Confirm,
-  ]
-];
-
-const List<List> _defaultNumericLayout = [
-  // Row 1
-  const [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '0',
-  ],
-
-  // Row 2
-  const [
-    '@',
-    '#',
-    '\$',
-    '_',
-    '&',
-    '-',
-    '+',
-    '(',
-    ')',
-    '/',
-  ],
-
-  // Row 3
-  const [
-    KeyAction.SwitchSpecial,
-    '*',
-    '"',
-    '\'',
-    ':',
-    ';',
-    '!',
-    '?',
+    KeyAction.SwitchShift,
+    "ꦚ",
+    "ꦔ",
+    "ꦕ",
+    "ꦊ",
+    "ꦧ",
+    "ꦤ",
+    "ꦩ",
+    "ꦛ",
     KeyAction.Backspace,
   ],
-
-  // Row 4
   const [
-    KeyAction.SwitchAlphabetic,
-    ',',
     KeyAction.SwitchNumber,
+    "꧊",
     KeyAction.Space,
-    '.',
-    KeyAction.Confirm,
-  ]
+    "꧋",
+    KeyAction.Enter,
+  ],
 ];
 
-const List<List> _defaultSpecialLayout = [
-  // Row 1
-  [
-    '~',
-    '\`',
-    '|',
-    '•',
-    '√',
-    'π',
-    '÷',
-    '×',
-    '§',
-    '∆',
+const List<List> _shiftKeyboardLayout = [
+  const [
+    "ꦴ",
+    "ꦷ",
+    "ꦹ",
+    "ꦵ",
+    "꧁",
+    "꧂",
+    "꧃",
+    "꧄",
+    "꧅",
+    " ",
   ],
-
-  // Row 2
-  [
-    '£',
-    '¢',
-    '€',
-    '¥',
-    '^',
-    '°',
-    '=',
-    '{',
-    '}',
-    '\\',
+  const [
+    "ꦐ",
+    "ꦻ",
+    "ꦌ",
+    "ꦍ",
+    "ꦡ",
+    "ꦅ",
+    "ꦈ",
+    "ꦆ",
+    "ꦎ",
+    "ꦦ",
   ],
-
-  // Row 3
-  [
-    KeyAction.SwitchNumeric,
-    '%',
-    '©',
-    '®',
-    '™',
-    '✓',
-    '[',
-    ']',
+  const [
+    "ꦄ",
+    "ꦯ",
+    "ꦣ",
+    "ꦬ",
+    "ꦓ",
+    "ꦙ",
+    "ꦘ",
+    "ꦑ",
+    "ꦇ",
+    "ꦞ",
+  ],
+  const [
+    KeyAction.SwitchMain,
+    "꧌",
+    "꧍",
+    "ꦖ",
+    "ꦋ",
+    "ꦨ",
+    "ꦟ",
+    "ꦰ",
+    "ꦜ",
     KeyAction.Backspace,
   ],
-
-  // Row 4
-  [
-    KeyAction.SwitchAlphabetic,
-    '<',
+  const [
     KeyAction.SwitchNumber,
+    "꧊",
     KeyAction.Space,
-    '>',
-    KeyAction.Confirm,
-  ]
+    "꧋",
+    KeyAction.Enter,
+  ],
 ];
 
-const List<List> _defaultNumberLayout = [
-  // Row 1
-  [
-    '+',
-    '1',
-    '2',
-    '3',
-    '%',
+const List<List> _numberKeyboardLayout = [
+  const [
+    "꧑",
+    "꧒",
+    "꧓",
+    "꧔",
+    "꧕",
+    "꧖",
+    "꧗",
+    "꧘",
+    "꧙",
+    "꧐",
   ],
-
-  // Row 2
-  [
-    '-',
-    '4',
-    '5',
-    '6',
-    KeyAction.Space,
+  const [
+    "@",
+    "#",
+    "\$",
+    "%",
+    "^",
+    "&",
+    "*",
+    "(",
+    ")",
+    "=",
   ],
-
-  // Row 3
-  [
-    '/',
-    '7',
-    '8',
-    '9',
+  const [
+    "+",
+    "-",
+    "×",
+    "÷",
+    "<",
+    ">",
+    "{",
+    "}",
+    "[",
+    "]",
+  ],
+  const [
+    KeyAction.SwitchShift,
+    "_",
+    "‘",
+    "“”",
+    "~",
+    "|",
+    "\\",
+    "꧞",
+    "꧟",
     KeyAction.Backspace,
   ],
-
-  // Row 4
-  [
-    KeyAction.SwitchAlphabetic,
-    KeyAction.SwitchNumeric,
-    '0',
-    '=',
-    KeyAction.Confirm,
-  ]
+  const [
+    KeyAction.SwitchNumber,
+    "!",
+    KeyAction.Space,
+    "?",
+    KeyAction.Enter,
+  ],
 ];

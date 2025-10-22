@@ -21,9 +21,8 @@ publish_to: 'none'
 dependencies:
   flutter:
     sdk: flutter
-  scaled_app: ^2.3.0
 
-  in_app_keyboard:
+  aksara_jawa_keyboard:
     path: ../
 
   # The following adds the Cupertino Icons font to your application.
