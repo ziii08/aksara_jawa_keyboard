@@ -1,4 +1,4 @@
-library in_app_keyboard;
+library aksara_jawa_keyboard;
 
 import 'dart:async';
 import 'dart:math' as math;

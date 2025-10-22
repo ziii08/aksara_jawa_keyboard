@@ -1,3 +1,3 @@
-part of in_app_keyboard;
+part of aksara_jawa_keyboard;
 
 enum KeyboardLayoutType {Main, Shift, Number}

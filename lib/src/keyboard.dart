@@ -1,4 +1,4 @@
-part of in_app_keyboard;
+part of aksara_jawa_keyboard;
 
 /// The default keyboard height. Can we overriden by passing
 ///  `height` argument to `VirtualKeyboard` widget.

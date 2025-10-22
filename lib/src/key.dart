@@ -1,4 +1,4 @@
-part of in_app_keyboard;
+part of aksara_jawa_keyboard;
 
 class KeyboardKey {
   String? text;

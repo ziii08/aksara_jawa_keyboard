@@ -22,7 +22,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  in_app_keyboard:
+  aksara_jawa_keyboard:
     path: ../
 
   # The following adds the Cupertino Icons font to your application.
