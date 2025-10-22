@@ -2,7 +2,7 @@
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:in_app_keyboard/in_app_keyboard.dart';
+import 'package:aksara_jawa_keyboard/aksara_jawa_keyboard.dart';
 
 void main() => runApp(MyApp());
 

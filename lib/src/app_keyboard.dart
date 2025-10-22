@@ -1,37 +1,25 @@
-part of in_app_keyboard;
+part of aksara_jawa_keyboard;
 
 class AppKeyboard extends StatefulWidget {
   final List<FocusNode> focusNodes;
   final List<TextEditingController> textControllers;
-  final List<KeyboardType> keyboardTypes;
-
-  /// Define one layout will hide switch language button
-  final List<KeyboardDefaultLayouts>? defaultLayouts;
-  final KeyboardLayoutKeys? customLayoutKeys;
   final Duration showDuration;
   final Color foregroundColor;
   final Color backgroundColor;
   final double fontSize;
   final double height;
-  final double? width;
   final void Function(bool isShow) onShow;
-  final void Function(ShiftState)? onShiftStateChanged;
 
   AppKeyboard({
     Key? key,
     required this.focusNodes,
     required this.textControllers,
-    required this.keyboardTypes,
-    this.defaultLayouts,
-    this.customLayoutKeys,
     this.showDuration = const Duration(milliseconds: 250),
     this.foregroundColor = Colors.black,
-    this.backgroundColor = const Color(0xFFe3f2fd),
+    this.backgroundColor = const Color(0xFFd1d4d9),
     this.fontSize = 20,
     this.height = 250,
-    this.width,
     required this.onShow,
-    this.onShiftStateChanged,
   });
 
   @override
@@ -39,13 +27,14 @@ class AppKeyboard extends StatefulWidget {
 }
 
 class _AppKeyboardState extends State<AppKeyboard> {
+  bool shiftEnabled = false;
+  bool isNumericMode = false;
   bool isShow = false;
   double height = 0;
   bool isMaintainKeyboard = false;
 
   late FocusNode currentFocus;
   late TextEditingController currentTextController;
-  late KeyboardType currentKeyboardType;
 
   @override
   void initState() {
@@ -60,8 +49,7 @@ class _AppKeyboardState extends State<AppKeyboard> {
           currentFocus = e;
           currentTextController =
               widget.textControllers[widget.focusNodes.indexOf(e)];
-          currentKeyboardType =
-              widget.keyboardTypes[widget.focusNodes.indexOf(e)];
+          setState(() {});
         } else {
           await Future.delayed(Duration(milliseconds: 100));
           if (currentFocus.hasFocus || isMaintainKeyboard) return;
@@ -80,19 +68,11 @@ class _AppKeyboardState extends State<AppKeyboard> {
   }
 
   void closeKeyboard() {
-    if (currentFocus.hasFocus) {
-      currentFocus.unfocus();
-    }
-    // Add a small delay to ensure the unfocus takes effect before hiding keyboard
-    Future.delayed(const Duration(milliseconds: 50), () {
-      if (mounted) {
-        setState(() {
-          isShow = false;
-          height = 0;
-        });
-        widget.onShow(isShow);
-      }
-    });
+    FocusScope.of(context).unfocus();
+    isShow = false;
+    widget.onShow(isShow);
+    height = 0;
+    setState(() {});
   }
 
   @override
@@ -103,22 +83,16 @@ class _AppKeyboardState extends State<AppKeyboard> {
       child: AnimatedSize(
         duration: widget.showDuration,
         alignment: Alignment.topCenter,
-        child: Container(
-          height: height,
+        child: ColoredBox(
           color: widget.backgroundColor,
           child: !isShow
               ? null
               : Keyboard(
                   height: widget.height,
-                  width: widget.width,
                   fontSize: widget.fontSize,
                   textColor: widget.foregroundColor,
                   textController: currentTextController,
-                  customLayoutKeys: widget.customLayoutKeys,
-                  defaultLayouts: widget.defaultLayouts,
-                  type: currentKeyboardType,
                   onKeyPress: _onKeyPress,
-                  onShiftStateChanged: widget.onShiftStateChanged,
                 ),
         ),
       ),
@@ -126,15 +100,9 @@ class _AppKeyboardState extends State<AppKeyboard> {
   }
 
   _onKeyPress(KeyboardKey key) {
-    if (key.keyType != KeyboardKeyType.Action) {
-      currentFocus.requestFocus();
-      return;
-    }
-    if (key.action != KeyAction.Confirm) {
-      currentFocus.requestFocus();
-      return;
-    }
-    // Don't request focus when confirming, just close the keyboard
+    currentFocus.requestFocus();
+    if (key.keyType != KeyboardKeyType.Action) return;
+    if (key.action != KeyAction.Confirm) return;
     closeKeyboard();
   }
 }
