@@ -8,9 +8,6 @@ const int _keyboardBackspaceEventPerioud = 100;
 
 /// Virtual Keyboard widget.
 class Keyboard extends StatefulWidget {
-  /// Keyboard Type: Should be inited in creation time.
-  final KeyboardType type;
-
   /// Callback for Key press event. Called with pressed `Key` object.
   final Function? onKeyPress;
 
@@ -35,32 +32,25 @@ class Keyboard extends StatefulWidget {
   /// The builder function will be called for each Key object.
   final Widget Function(BuildContext context, KeyboardKey key)? builder;
 
-  /// Set to true if you want only to show Caps letters.
-  final bool alwaysCaps;
-
   /// inverse the layout to fix the issues with right to left languages.
   final bool reverseLayout;
 
   /// used for multi-languages with default layouts, the default is English only
   /// will be ignored if customLayoutKeys is not null
-  final List<KeyboardDefaultLayouts>? defaultLayouts;
 
   final bool shadow;
 
   Keyboard(
       {Key? key,
-      required this.type,
       this.onKeyPress,
       this.builder,
       this.width,
-      this.defaultLayouts,
       this.customLayoutKeys,
       this.textController,
       this.reverseLayout = false,
       this.height = _keyboardDefaultHeight,
       this.textColor = Colors.black,
       this.fontSize = 14,
-      this.alwaysCaps = false,
       this.shadow = false})
       : super(key: key);
 
@@ -72,7 +62,6 @@ class Keyboard extends StatefulWidget {
 
 /// Holds the state for Virtual Keyboard class.
 class _KeyboardState extends State<Keyboard> {
-  late KeyboardType type;
   Function? onKeyPress;
   late TextEditingController textController;
   // The builder function will be called for each Key object.
@@ -83,12 +72,9 @@ class _KeyboardState extends State<Keyboard> {
   late double fontSize;
   late bool alwaysCaps;
   late bool reverseLayout;
-  late KeyboardLayoutKeys customLayoutKeys;
+  KeyboardLayoutKeys customLayoutKeys = AksaraJawaKeyboard();
   // Text Style for keys.
   late TextStyle textStyle;
-
-  // True if shift is enabled.
-  bool isShiftEnabled = false;
 
   void _onKeyPress(KeyboardKey key) {
     var cursorPos = textController.selection.base.offset;
@@ -99,7 +85,7 @@ class _KeyboardState extends State<Keyboard> {
 
     if (key.keyType == KeyboardKeyType.String) {
       textController.text = textController.text.substring(0, cursorPos) +
-          ((isShiftEnabled ? key.capsText : key.text) ?? '') +
+          ((key.text) ?? '') +
           textController.text.substring(cursorPos);
       // set cursor position
       textController.selection =
@@ -118,13 +104,11 @@ class _KeyboardState extends State<Keyboard> {
           }
 
           break;
-        case KeyAction.Return:
-          textController.text += '\n';
-          break;
         case KeyAction.Space:
           textController.text += (key.text ?? '');
           break;
-        case KeyAction.Shift:
+        case KeyAction.Enter:
+          textController.text += '\n';
           break;
         default:
       }
@@ -144,14 +128,12 @@ class _KeyboardState extends State<Keyboard> {
   void didUpdateWidget(Keyboard oldWidget) {
     super.didUpdateWidget(oldWidget);
     setState(() {
-      type = widget.type;
       builder = widget.builder;
       onKeyPress = widget.onKeyPress;
       height = widget.height;
       width = widget.width;
       textColor = widget.textColor;
       fontSize = widget.fontSize;
-      alwaysCaps = widget.alwaysCaps;
       reverseLayout = widget.reverseLayout;
       textController = widget.textController ?? textController;
       customLayoutKeys = widget.customLayoutKeys ?? customLayoutKeys;
@@ -169,16 +151,11 @@ class _KeyboardState extends State<Keyboard> {
 
     textController = widget.textController ?? TextEditingController();
     width = widget.width;
-    type = widget.type;
-    customLayoutKeys = widget.customLayoutKeys ??
-        KeyboardDefaultLayoutKeys(
-            widget.defaultLayouts ?? [KeyboardDefaultLayouts.English]);
     builder = widget.builder;
     onKeyPress = widget.onKeyPress;
     height = widget.height;
     textColor = widget.textColor;
     fontSize = widget.fontSize;
-    alwaysCaps = widget.alwaysCaps;
     reverseLayout = widget.reverseLayout;
     // Init the Text Style for keys.
     textStyle = TextStyle(
@@ -189,29 +166,22 @@ class _KeyboardState extends State<Keyboard> {
 
   @override
   Widget build(BuildContext context) {
-    return type == KeyboardType.Numeric ? _numeric() : _alphanumeric();
+    return _alphanumeric();
   }
 
   Widget _alphanumeric() {
-    return Container(
-      height: height,
-      width: width ?? MediaQuery.of(context).size.width,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: _rows(),
-      ),
-    );
-  }
-
-  Widget _numeric() {
-    return Container(
-      height: height,
-      width: width ?? MediaQuery.of(context).size.width,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: _rows(),
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsetsGeometry.only(top: 20, bottom: 12),
+        child: SizedBox(
+          height: height,
+          width: width ?? MediaQuery.of(context).size.width,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: _rows(),
+          ),
+        ),
       ),
     );
   }
@@ -219,9 +189,7 @@ class _KeyboardState extends State<Keyboard> {
   /// Returns the rows for keyboard.
   List<Widget> _rows() {
     // Get the keyboard Rows
-    List<List<KeyboardKey>> keyboardRows = type == KeyboardType.Numeric
-        ? _getKeyboardRowsNumeric()
-        : _getKeyboardRows(customLayoutKeys);
+    List<List<KeyboardKey>> keyboardRows = _getKeyboardRows(customLayoutKeys);
 
     // Generate keyboard row.
     List<Widget> rows = List.generate(keyboardRows.length, (int rowNum) {
@@ -278,39 +246,28 @@ class _KeyboardState extends State<Keyboard> {
 
   /// Creates default UI element for keyboard Key.
   Widget _keyboardDefaultKey(KeyboardKey key) {
-    return Container(
-        width: MediaQuery.of(context).size.width / customLayoutKeys.activeLayout[0].length,
-        child: InkWell(
-          onTap: () {
-            _onKeyPress(key);
-          },
-          child: Container(
-            height: height / customLayoutKeys.activeLayout.length,
-            padding: EdgeInsets.symmetric(vertical: 3, horizontal: 1.5),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: Colors.white,
-                boxShadow: widget.shadow ? [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.25),
-                    blurRadius: 4,
-                    offset: const Offset(0, 1),
-                  ),
-                ] : null,
-              ),
-              child: Center(
-                  child: FittedBox(
+    return SizedBox(
+        width: MediaQuery.of(context).size.width /
+            customLayoutKeys.activeLayout[0].length,
+        height: height / customLayoutKeys.activeLayout.length,
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 2, horizontal: 1),
+          child: InkWell(
+            onTap: () {
+              _onKeyPress(key);
+            },
+            child: CustomContainer(
+              child: FittedBox(
                 fit: BoxFit.scaleDown,
+                clipBehavior: Clip.hardEdge,
                 alignment: Alignment.center,
                 child: Text(
-                  alwaysCaps
-                      ? key.capsText ?? ''
-                      : (isShiftEnabled ? key.capsText : key.text) ?? '',
+                  key.text ?? '',
                   style: textStyle.copyWith(
-                      fontSize: 20, fontWeight: FontWeight.bold),
+                      fontFamily: 'nyk Ngayogyan New',
+                      fontWeight: FontWeight.w600),
                 ),
-              )),
+              ),
             ),
           ),
         ));
@@ -322,10 +279,10 @@ class _KeyboardState extends State<Keyboard> {
     Widget? actionKey;
 
     // Switch the action type to build action Key widget.
-    switch (key.action ?? KeyAction.SwithLanguage) {
+    switch (key.action ?? KeyAction.SwitchMain) {
       case KeyAction.Backspace:
         actionKey = Padding(
-          padding: EdgeInsets.symmetric(vertical: 3, horizontal: 1.5),
+          padding: EdgeInsets.symmetric(vertical: 2, horizontal: 1),
           child: GestureDetector(
               onLongPress: () {
                 longPress = true;
@@ -345,215 +302,110 @@ class _KeyboardState extends State<Keyboard> {
                 // Cancel event loop
                 longPress = false;
               },
-              child: Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Color(0xFFB3B3B3),
-                ),
+              child: CustomContainer(
+                color: Color(0xFFB5B5B5),
                 child: Icon(
-                  Icons.backspace,
+                  Icons.backspace_outlined,
                   color: textColor,
                 ),
               )),
         );
         break;
-      case KeyAction.Shift:
-        actionKey = Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-            color: Color(0xFFB3B3B3),
-            borderRadius: BorderRadius.circular(5),
-          ),
-          margin: EdgeInsets.symmetric(vertical: 3, horizontal: 1.5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                isShiftEnabled ? Icons.arrow_upward : Icons.keyboard_arrow_up,
-                color: textColor,
-                size: 18,
+      case KeyAction.SwitchShift || KeyAction.SwitchMain:
+        actionKey = Padding(
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 1),
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                if (key.action == KeyAction.SwitchMain) {
+                  customLayoutKeys.switchMain();
+                } else {
+                  customLayoutKeys.switchShift();
+                }
+              });
+            },
+            child: CustomContainer(
+              color: Color(0xFFB5B5B5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.arrow_upward,
+                    color: textColor,
+                    size: 18,
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         );
         break;
       case KeyAction.Space:
-        actionKey = actionKey = Container(
-          width: double.infinity,
-          height: double.infinity,
-          margin: EdgeInsets.symmetric(vertical: 3, horizontal: 1.5),
-          decoration: BoxDecoration(
+        actionKey = actionKey = Padding(
+          padding: EdgeInsets.symmetric(vertical: 2, horizontal: 1),
+          child: CustomContainer(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(5),
+            child: Text(
+              "Spasi",
+              style: textStyle.copyWith(fontWeight: FontWeight.bold),
+            ),
           ),
         );
-        break;
-      case KeyAction.Return:
-        actionKey = Icon(
-          Icons.keyboard_return,
-          color: textColor,
-        );
-        break;
-      case KeyAction.SwithLanguage:
-        actionKey = GestureDetector(
-            onTap: () {
-              setState(() {
-                customLayoutKeys.switchLanguage();
-              });
-            },
-            child: Container(
-              height: double.infinity,
-              width: double.infinity,
-              margin: EdgeInsets.symmetric(vertical: 3, horizontal: 1.5),
-              decoration: BoxDecoration(
-                color: Color(0xFFB3B3B3),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(
-                Icons.language,
-                color: textColor,
-              ),
-            ));
         break;
 
       case KeyAction.Confirm:
-        actionKey = Container(
-          height: double.infinity,
-          width: double.infinity,
-          margin: EdgeInsets.symmetric(vertical: 3, horizontal: 1.5),
-          decoration: BoxDecoration(
-            color: Color(0xFFB3B3B3),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Icon(
-            Icons.check_circle_rounded,
-            color: textColor,
-          ),
-        );
-        break;
-
-      case KeyAction.SwithNumeric:
-        actionKey = GestureDetector(
-            onTap: () {
-              setState(() {
-                customLayoutKeys.switchNumeric();
-              });
-            },
-            child: Container(
-              height: double.infinity,
-              width: double.infinity,
-              margin: EdgeInsets.symmetric(vertical: 3, horizontal: 1.5),
-              padding: EdgeInsets.all(1.5),
-              decoration: BoxDecoration(
-                color: Color(0xFFB3B3B3),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.center,
-                child: Text('?123',
-                    style: textStyle.copyWith(
-                        fontSize: 20, fontWeight: FontWeight.bold)),
-              ),
-            ));
-        break;
-
-      case KeyAction.SwitchAlphabetic:
         actionKey = Padding(
-          padding: EdgeInsets.symmetric(vertical: 3, horizontal: 1.5),
-          child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  customLayoutKeys.switchAlphabetic();
-                });
-              },
-              child: Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Color(0xFFB3B3B3),
-                ),
-                child: Icon(
-                  Icons.abc,
-                  color: textColor,
-                ),
-              )),
-        );
-        break;
-
-      case KeyAction.SwitchSpecial:
-        actionKey = Padding(
-          padding: EdgeInsets.symmetric(vertical: 3, horizontal: 1.5),
-          child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  customLayoutKeys.switchSpecial();
-                });
-              },
-              child: Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Color(0xFFB3B3B3),
-                ),
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.center,
-                  child: Text('=\\<',
-                      style: textStyle.copyWith(
-                          fontSize: 20, fontWeight: FontWeight.bold)),
-                ),
-              )),
+          padding: EdgeInsets.symmetric(vertical: 2, horizontal: 1),
+          child: CustomContainer(
+            color: Color(0xFFB5B5B5),
+            child: Icon(
+              Icons.check_circle_rounded,
+              color: textColor,
+            ),
+          ),
         );
         break;
 
       case KeyAction.SwitchNumber:
-      actionKey = Padding(
-          padding: EdgeInsets.symmetric(vertical: 3, horizontal: 1.5),
+        actionKey = Padding(
+          padding: EdgeInsets.symmetric(vertical: 2, horizontal: 1),
           child: GestureDetector(
               onTap: () {
                 setState(() {
                   customLayoutKeys.switchNumber();
                 });
               },
-              child: Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Color(0xFFB3B3B3),
-                ),
+              child: CustomContainer(
+                color: Color(0xFFB5B5B5),
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   alignment: Alignment.center,
-                  child: Text('12\n34',
+                  child: Text('123',
                       style: textStyle.copyWith(
-                          fontSize: 20, fontWeight: FontWeight.bold, height: 1)),
+                          fontWeight: FontWeight.bold, height: 1)),
                 ),
               )),
+        );
+        break;
+      case KeyAction.Enter:
+        actionKey = Padding(
+          padding: EdgeInsets.symmetric(vertical: 2, horizontal: 1),
+          child: CustomContainer(
+            color: Color(0xFFB5B5B5),
+            child: Icon(
+              Icons.keyboard_return,
+              color: textColor,
+            ),
+          ),
         );
         break;
     }
 
     var wdgt = InkWell(
       onTap: () {
-        if (key.action == KeyAction.Shift) {
-          if (!alwaysCaps) {
-            setState(() {
-              isShiftEnabled = !isShiftEnabled;
-            });
-          }
-        }
-
         _onKeyPress(key);
       },
-      child: Container(
-        alignment: Alignment.center,
+      child: SizedBox(
         height: height / customLayoutKeys.activeLayout.length,
         child: actionKey,
       ),
@@ -561,11 +413,73 @@ class _KeyboardState extends State<Keyboard> {
 
     if (key.action == KeyAction.Space)
       return Expanded(flex: 5, child: wdgt);
-    else if (key.action == KeyAction.Confirm ||
-        key.action == KeyAction.Shift ||
+    else if (key.action == KeyAction.SwitchNumber ||
+        key.action == KeyAction.Enter) {
+      return Expanded(flex: 2, child: wdgt);
+    } else if (key.action == KeyAction.Confirm ||
+        key.action == KeyAction.SwitchShift ||
         key.action == KeyAction.Backspace)
       return Expanded(child: wdgt);
     else
       return Expanded(child: wdgt);
   }
+}
+
+class CustomContainer extends StatelessWidget {
+  const CustomContainer({
+    super.key,
+    this.width,
+    this.height,
+    this.radius,
+    this.color = Colors.white,
+    this.alignment = Alignment.center,
+    required this.child,
+  });
+
+  final double? width;
+  final double? height;
+  final double? radius;
+  final Color color;
+  final Widget child;
+  final AlignmentGeometry alignment;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipPath(
+        clipper: CustomRounded(radius: radius ?? 5),
+        child: ColoredBox(
+            color: color,
+            child: SizedBox(
+              width: width ?? double.infinity,
+              height: height ?? double.infinity,
+              child: Align(alignment: alignment, child: child),
+            )));
+  }
+}
+
+class CustomRounded extends CustomClipper<Path> {
+  CustomRounded({this.radius = 5});
+
+  final double radius;
+
+  @override
+  Path getClip(Size s) {
+    final topRect = Rect.fromLTWH(0, 0, s.width, (2 * radius).toDouble());
+    final bottomRect = Rect.fromLTWH(
+        0, s.height - 2 * radius, s.width, (2 * radius).toDouble());
+
+    final p = Path()
+      ..moveTo(0, radius.toDouble())
+      ..lineTo(0, s.height - radius)
+      ..arcTo(bottomRect, math.pi, -math.pi,
+          false)
+      ..lineTo(s.width, radius.toDouble())
+      ..arcTo(topRect, 0, -math.pi, false)
+      ..close();
+
+    return p;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

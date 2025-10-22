@@ -27,10 +27,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final _controllerText1 = TextEditingController();
   final _focusNodeText1 = FocusNode();
-  final _keyboardTypeText1 = KeyboardType.Numeric;
   final _controllerText2 = TextEditingController();
   final _focusNodeText2 = FocusNode();
-  final _keyboardTypeText2 = KeyboardType.Alphanumeric;
   final _controllerText3 = TextEditingController();
 
   @override
@@ -54,6 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
               decoration: InputDecoration(
                 labelText: 'This is Number',
               ),
+              style: TextStyle(fontFamily: 'nyk Ngayogyan New'),
             ),
             TextFormField(
               focusNode: _focusNodeText2,
@@ -62,6 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
               decoration: InputDecoration(
                 labelText: 'This is AlphaNumeric',
               ),
+              style: TextStyle(fontFamily: 'nyk Ngayogyan New', fontWeight: FontWeight.w600),
             ),
             TextFormField(
               controller: _controllerText3,
@@ -82,7 +82,6 @@ class _MyHomePageState extends State<MyHomePage> {
             AppKeyboard(
               focusNodes: [_focusNodeText1, _focusNodeText2],
               textControllers: [_controllerText1, _controllerText2],
-              keyboardTypes: [_keyboardTypeText1, _keyboardTypeText2],
               onShow: (isShow) {
                 print('Keyboard is ${isShow ? 'visible' : 'hidden'}');
               },
