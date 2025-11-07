@@ -32,13 +32,7 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: nyk Ngayogyan New
-      fonts:
-        - asset: assets/fonts/nyk Ngayogyan New Italic.ttf
-    - family: nyk Ngayogyan Jejeg
-      fonts:
-        - asset: assets/fonts/nyk Ngayogyan Jejeg.ttf
+  # fonts:
   #
   # For details regarding fonts in packages, see
   # https://flutter.io/custom-fonts/#from-packages

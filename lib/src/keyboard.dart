@@ -23,6 +23,9 @@ class Keyboard extends StatefulWidget {
   /// Font size for keyboard keys.
   final double fontSize;
 
+  /// Font family for keyboard keys.
+  final String? fontFamily;
+
   /// the custom layout for multi or single language
   final KeyboardLayoutKeys? customLayoutKeys;
 
@@ -51,6 +54,7 @@ class Keyboard extends StatefulWidget {
       this.height = _keyboardDefaultHeight,
       this.textColor = Colors.black,
       this.fontSize = 14,
+      this.fontFamily,
       this.shadow = false})
       : super(key: key);
 
@@ -84,32 +88,50 @@ class _KeyboardState extends State<Keyboard> {
     }
 
     if (key.keyType == KeyboardKeyType.String) {
-      textController.text = textController.text.substring(0, cursorPos) +
-          ((key.text) ?? '') +
+      final newText = textController.text.substring(0, cursorPos) +
+          (key.text ?? '') +
           textController.text.substring(cursorPos);
-      // set cursor position
-      textController.selection =
-          TextSelection.fromPosition(TextPosition(offset: cursorPos + 1));
+
+      textController.value = TextEditingValue(
+        text: newText,
+        selection: TextSelection.collapsed(offset: cursorPos + 1),
+      );
     } else if (key.keyType == KeyboardKeyType.Action) {
       switch (key.action) {
         case KeyAction.Backspace:
           if (textController.text.isNotEmpty && cursorPos > 0) {
-            // Periksa apakah hanya ada satu karakter atau kursor ada di posisi pertama.
-            textController.text =
-                textController.text.substring(0, cursorPos - 1) +
-                    textController.text.substring(cursorPos);
-            // set cursor position
-            textController.selection =
-                TextSelection.fromPosition(TextPosition(offset: cursorPos - 1));
-          }
+            final newText = textController.text.substring(0, cursorPos - 1) +
+                textController.text.substring(cursorPos);
 
+            textController.value = TextEditingValue(
+              text: newText,
+              selection: TextSelection.collapsed(offset: cursorPos - 1),
+            );
+          }
           break;
+
         case KeyAction.Space:
-          textController.text += (key.text ?? '');
+          final newText = textController.text.substring(0, cursorPos) +
+              ' ' +
+              textController.text.substring(cursorPos);
+
+          textController.value = TextEditingValue(
+            text: newText,
+            selection: TextSelection.collapsed(offset: cursorPos + 1),
+          );
           break;
+
         case KeyAction.Enter:
-          textController.text += '\n';
+          final newText = textController.text.substring(0, cursorPos) +
+              '\n' +
+              textController.text.substring(cursorPos);
+
+          textController.value = TextEditingValue(
+            text: newText,
+            selection: TextSelection.collapsed(offset: cursorPos + 1),
+          );
           break;
+
         default:
       }
     }
@@ -141,6 +163,7 @@ class _KeyboardState extends State<Keyboard> {
       textStyle = TextStyle(
         fontSize: fontSize,
         color: textColor,
+        fontFamily: widget.fontFamily
       );
     });
   }
@@ -161,6 +184,7 @@ class _KeyboardState extends State<Keyboard> {
     textStyle = TextStyle(
       fontSize: fontSize,
       color: textColor,
+      fontFamily: widget.fontFamily
     );
   }
 
@@ -264,7 +288,6 @@ class _KeyboardState extends State<Keyboard> {
                 child: Text(
                   key.text ?? '',
                   style: textStyle.copyWith(
-                      fontFamily: 'nyk Ngayogyan New',
                       fontWeight: FontWeight.w600),
                 ),
               ),
@@ -471,8 +494,7 @@ class CustomRounded extends CustomClipper<Path> {
     final p = Path()
       ..moveTo(0, radius.toDouble())
       ..lineTo(0, s.height - radius)
-      ..arcTo(bottomRect, math.pi, -math.pi,
-          false)
+      ..arcTo(bottomRect, math.pi, -math.pi, false)
       ..lineTo(s.width, radius.toDouble())
       ..arcTo(topRect, 0, -math.pi, false)
       ..close();
