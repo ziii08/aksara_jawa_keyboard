@@ -23,6 +23,9 @@ class Keyboard extends StatefulWidget {
   /// Font size for keyboard keys.
   final double fontSize;
 
+  /// Font family for keyboard keys.
+  final String? fontFamily;
+
   /// the custom layout for multi or single language
   final KeyboardLayoutKeys? customLayoutKeys;
 
@@ -51,6 +54,7 @@ class Keyboard extends StatefulWidget {
       this.height = _keyboardDefaultHeight,
       this.textColor = Colors.black,
       this.fontSize = 14,
+      this.fontFamily,
       this.shadow = false})
       : super(key: key);
 
@@ -159,6 +163,7 @@ class _KeyboardState extends State<Keyboard> {
       textStyle = TextStyle(
         fontSize: fontSize,
         color: textColor,
+        fontFamily: widget.fontFamily
       );
     });
   }
@@ -179,6 +184,7 @@ class _KeyboardState extends State<Keyboard> {
     textStyle = TextStyle(
       fontSize: fontSize,
       color: textColor,
+      fontFamily: widget.fontFamily
     );
   }
 
@@ -282,8 +288,6 @@ class _KeyboardState extends State<Keyboard> {
                 child: Text(
                   key.text ?? '',
                   style: textStyle.copyWith(
-                      fontFamily: 'nyk Ngayogyan New',
-                      package: 'aksara_jawa_keyboard',
                       fontWeight: FontWeight.w600),
                 ),
               ),

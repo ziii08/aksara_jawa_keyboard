@@ -9,6 +9,7 @@ class AppKeyboard extends StatefulWidget {
   final double fontSize;
   final double height;
   final void Function(bool isShow) onShow;
+  final String? fontFamily;
 
   const AppKeyboard({
     super.key,
@@ -20,6 +21,7 @@ class AppKeyboard extends StatefulWidget {
     this.fontSize = 20,
     this.height = 250,
     required this.onShow,
+    this.fontFamily,
   });
 
   @override
