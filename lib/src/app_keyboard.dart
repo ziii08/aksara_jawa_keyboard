@@ -3,7 +3,7 @@ part of aksara_jawa_keyboard;
 class AppKeyboard extends StatefulWidget {
   final List<FocusNode> focusNodes;
   final List<TextEditingController> textControllers;
-  final Duration showDuration;
+  // final Duration showDuration;
   final Color foregroundColor;
   final Color backgroundColor;
   final double fontSize;
@@ -14,7 +14,7 @@ class AppKeyboard extends StatefulWidget {
     super.key,
     required this.focusNodes,
     required this.textControllers,
-    this.showDuration = const Duration(milliseconds: 250),
+    // this.showDuration = const Duration(milliseconds: 250),
     this.foregroundColor = Colors.black,
     this.backgroundColor = const Color(0xFFd1d4d9),
     this.fontSize = 20,
@@ -108,21 +108,17 @@ class _AppKeyboardState extends State<AppKeyboard> {
       onTapDown: (_) => isMaintainKeyboard = true,
       onTapUp: (_) => isMaintainKeyboard = false,   // reset correctly
       onTapCancel: () => isMaintainKeyboard = false,
-      child: AnimatedSize(
-        duration: widget.showDuration,
-        alignment: Alignment.topCenter,
-        child: ColoredBox(
-          color: widget.backgroundColor,
-          child: !isShow || currentTextController == null
-              ? null
-              : Keyboard(
-                  height: widget.height,
-                  fontSize: widget.fontSize,
-                  textColor: widget.foregroundColor,
-                  textController: currentTextController!,
-                  onKeyPress: _onKeyPress,
-                ),
-        ),
+      child: ColoredBox(
+        color: widget.backgroundColor,
+        child: !isShow || currentTextController == null
+            ? null
+            : Keyboard(
+                height: widget.height,
+                fontSize: widget.fontSize,
+                textColor: widget.foregroundColor,
+                textController: currentTextController!,
+                onKeyPress: _onKeyPress,
+              ),
       ),
     );
   }

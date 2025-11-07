@@ -283,6 +283,7 @@ class _KeyboardState extends State<Keyboard> {
                   key.text ?? '',
                   style: textStyle.copyWith(
                       fontFamily: 'nyk Ngayogyan New',
+                      package: 'aksara_jawa_keyboard',
                       fontWeight: FontWeight.w600),
                 ),
               ),
